@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Forge Automation</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#e8192c;--orange:#ff6b1a;--ember:#ff8c00;--gold:#ffb347;
+  --rg:rgba(232,25,44,0.5);--og:rgba(255,107,26,0.4);--eg:rgba(255,140,0,0.3);
+  --bg:#000000;--bg2:#050305;--bg3:#0a0508;--bg4:#100a0c;
+  --text:#fff;--text2:#7a6a5a;--text3:#c4a882;
+  --border:rgba(255,107,26,0.18);--border2:rgba(255,107,26,0.35);
+  --fh:'Orbitron',monospace;--fb:'Rajdhani',sans-serif;--fi:'Inter',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--fi);overflow-x:hidden;}
+
+/* FORGE BG CANVAS */
+#forgeCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:900;padding:0 6%;transition:all .4s;}
+nav.scrolled{background:rgba(0,0,0,0.97);backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,107,26,0.12);}
+.nav-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:78px;}
+.nav-logo{font-family:var(--fh);font-size:.85rem;font-weight:900;color:#fff;letter-spacing:3px;display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo .ai{color:var(--orange);text-shadow:0 0 20px var(--og);}
+.forge-spark{width:10px;height:10px;background:linear-gradient(135deg,var(--orange),var(--red));transform:rotate(45deg);box-shadow:0 0 12px var(--og);animation:sparkSpin 3s linear infinite;}
+@keyframes sparkSpin{0%{transform:rotate(45deg);box-shadow:0 0 12px var(--og);}50%{box-shadow:0 0 24px var(--og),0 0 48px rgba(255,107,26,0.2);}100%{transform:rotate(405deg);box-shadow:0 0 12px var(--og);}}
+.nav-links{display:flex;gap:3rem;list-style:none;}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.72rem;letter-spacing:2px;font-weight:500;transition:all .25s;text-transform:uppercase;font-family:var(--fb);position:relative;}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:linear-gradient(90deg,var(--orange),var(--red));transition:width .3s;}
+.nav-links a:hover{color:#fff;}
+.nav-links a:hover::after{width:100%;}
+.nav-cta{position:relative;overflow:hidden;background:transparent;border:1px solid var(--orange);color:var(--orange);padding:11px 32px;font-family:var(--fh);font-size:.6rem;letter-spacing:2px;cursor:pointer;transition:all .3s;text-transform:uppercase;}
+.nav-cta::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--orange),var(--red));transform:translateX(-101%);transition:transform .3s;}
+.nav-cta:hover{color:#fff;box-shadow:0 0 30px var(--og);}
+.nav-cta:hover::before{transform:translateX(0);}
+.nav-cta span{position:relative;z-index:1;}
+
+/* ══════════ HERO ══════════ */
+.hero{min-height:100vh;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+#heroForgeCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.hero-overlay{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 100% 80% at 50% 50%,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.5) 55%,rgba(0,0,0,0.98) 100%);}
+.hero-btm{position:absolute;bottom:0;left:0;right:0;height:320px;z-index:2;background:linear-gradient(transparent,#000);}
+.hero-content{position:relative;z-index:3;text-align:center;max-width:1100px;padding:0 5%;}
+
+/* FORGE TITLE ANIMATION */
+.forge-title{font-family:var(--fh);font-size:clamp(3rem,7vw,6.5rem);font-weight:900;letter-spacing:6px;line-height:.95;margin-bottom:2rem;display:block;}
+.forge-char{display:inline-block;opacity:0;transform:translateY(40px) scale(0.8);color:#fff;transition:text-shadow .3s;}
+.forge-char.forged{animation:forgeChar .5s cubic-bezier(.22,1,.36,1) forwards;}
+@keyframes forgeChar{
+  0%{opacity:0;transform:translateY(40px) scale(0.8);filter:blur(8px);color:var(--orange);}
+  40%{opacity:1;color:var(--orange);text-shadow:0 0 40px var(--og),0 0 80px rgba(255,107,26,0.3);filter:blur(0);}
+  70%{color:#fff;text-shadow:0 0 20px rgba(255,200,100,0.3);}
+  100%{opacity:1;transform:translateY(0) scale(1);color:#fff;text-shadow:none;}
+}
+.forge-char.space{display:inline-block;width:.35em;}
+.hero-accent{color:var(--orange);text-shadow:0 0 40px var(--og);}
+.hero-sub{font-size:1.15rem;color:rgba(255,255,255,0.55);max-width:600px;margin:0 auto 3rem;font-weight:300;line-height:1.9;opacity:0;animation:fadeUp .8s 2.5s forwards;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+.hero-btns{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s 2.7s forwards;}
+.btn-forge{background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;border:none;padding:17px 50px;font-family:var(--fh);font-size:.65rem;letter-spacing:2.5px;cursor:pointer;transition:all .3s;text-transform:uppercase;position:relative;overflow:hidden;clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px);}
+.btn-forge:hover{transform:translateY(-3px);box-shadow:0 0 50px var(--og),0 14px 40px rgba(255,107,26,0.3);}
+.btn-ghost{background:transparent;color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.18);padding:17px 50px;font-family:var(--fh);font-size:.65rem;letter-spacing:2.5px;cursor:pointer;transition:all .3s;text-transform:uppercase;}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,107,26,0.05);}
+.hero-stats{opacity:0;animation:fadeUp .8s 3s forwards;display:flex;margin-top:5rem;justify-content:center;gap:0;}
+.stat-box{padding:1.8rem 4rem;text-align:center;border:1px solid rgba(255,107,26,0.15);background:rgba(0,0,0,0.5);backdrop-filter:blur(16px);position:relative;}
+.stat-box+.stat-box{border-left:none;}
+.stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--orange),transparent);opacity:0.4;}
+.stat-n{font-family:var(--fh);font-size:2.2rem;font-weight:900;background:linear-gradient(135deg,var(--orange),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.stat-l{font-size:.6rem;letter-spacing:3px;color:var(--text2);text-transform:uppercase;margin-top:8px;font-family:var(--fb);}
+.scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp .8s 3.2s forwards;}
+.scroll-cue span{font-size:.55rem;letter-spacing:4px;color:var(--text2);font-family:var(--fh);text-transform:uppercase;}
+.scroll-fire{width:1px;height:50px;background:linear-gradient(var(--orange),var(--red),transparent);animation:fireScroll 1.8s ease-in-out infinite;}
+@keyframes fireScroll{0%,100%{opacity:.2;transform:scaleY(.7);}50%{opacity:1;transform:scaleY(1);}}
+
+/* ══════════ SECTIONS SHARED ══════════ */
+section{position:relative;z-index:1;padding:130px 6%;}
+.wrap{max-width:1300px;margin:0 auto;}
+.rv{opacity:0;transform:translateY(55px);transition:opacity .9s ease,transform .9s ease;}
+.rv.on{opacity:1;transform:none;}
+.rv1{transition-delay:.1s;}.rv2{transition-delay:.2s;}.rv3{transition-delay:.3s;}
+.rv4{transition-delay:.4s;}.rv5{transition-delay:.5s;}.rv6{transition-delay:.6s;}
+
+/* EDITORIAL LABEL */
+.ed-label{display:inline-flex;align-items:center;gap:16px;font-family:var(--fh);font-size:.58rem;letter-spacing:6px;color:var(--orange);text-transform:uppercase;margin-bottom:1.4rem;}
+.ed-label::before{content:'';width:28px;height:1px;background:linear-gradient(90deg,var(--orange),transparent);}
+.ed-label::after{content:'';width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--orange));}
+
+/* BIG EDITORIAL TITLE */
+.big-title{font-family:var(--fh);font-size:clamp(2.2rem,4vw,3.5rem);font-weight:900;line-height:1.05;letter-spacing:2px;margin-bottom:1.4rem;}
+.big-title em{font-style:normal;background:linear-gradient(135deg,var(--orange),var(--red));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.body-text{color:var(--text2);font-size:1rem;max-width:540px;font-weight:300;line-height:1.95;font-family:var(--fi);}
+.fire-bar{width:48px;height:2px;background:linear-gradient(90deg,var(--orange),var(--red));margin:1.6rem 0;box-shadow:0 0 14px var(--og);}
+
+/* SECTION DIVIDER — molten drip */
+.molten-divider{position:relative;height:3px;background:linear-gradient(90deg,transparent,var(--orange),var(--red),var(--orange),transparent);box-shadow:0 0 20px var(--og),0 0 40px rgba(255,107,26,0.2);overflow:visible;margin:0;}
+.molten-divider::after{content:'';position:absolute;left:50%;transform:translateX(-50%);top:0;width:8px;height:8px;background:var(--orange);border-radius:50%;box-shadow:0 0 16px var(--og);}
+
+/* ══════════ ABOUT / INTRO ══════════ */
+.intro-section{
+  background-image:url('https://images.pexels.com/photos/33343627/pexels-photo-33343627.jpeg?auto=compress&cs=tinysrgb&w=1920&fit=max');
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  position:relative;
+}
+.intro-section::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(0,0,0,0.88) 0%,rgba(5,2,0,0.82) 40%,rgba(0,0,0,0.88) 100%);
+  z-index:0;
+}
+/* spark overlay canvas inside about */
+#aboutSparkCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:1;
+  pointer-events:none;
+}
+/*
+
+
+/* ══════════ SERVICES ══════════ */
+.services-section{background:var(--bg2);}
+.services-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(255,107,26,0.05),transparent);}
+.svc-rows{margin-top:5rem;display:flex;flex-direction:column;gap:0;}
+.svc-row{display:grid;grid-template-columns:80px 1fr 2fr 160px;gap:3rem;align-items:center;padding:2.8rem 0;border-bottom:1px solid rgba(255,107,26,0.08);position:relative;transition:all .4s;cursor:default;}
+.svc-row::before{content:'';position:absolute;left:0;right:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(255,107,26,0.03),transparent);opacity:0;transition:opacity .4s;}
+.svc-row:hover::before{opacity:1;}
+.svc-row:hover{border-bottom-color:rgba(255,107,26,0.25);}
+.svc-row:hover .svc-num{color:var(--orange);text-shadow:0 0 20px var(--og);}
+.svc-row:hover .svc-icon-wrap{border-color:var(--orange);box-shadow:0 0 24px var(--og),inset 0 0 24px rgba(255,107,26,0.05);}
+.svc-num{font-family:var(--fh);font-size:1.4rem;font-weight:900;color:rgba(255,107,26,0.2);transition:all .4s;line-height:1;}
+.svc-icon-wrap{width:56px;height:56px;border:1px solid rgba(255,107,26,0.2);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:all .4s;background:rgba(255,107,26,0.04);}
+.svc-info h3{font-family:var(--fh);font-size:.82rem;letter-spacing:2px;margin-bottom:.6rem;color:#fff;text-transform:uppercase;}
+.svc-info p{font-size:.9rem;color:var(--text2);line-height:1.75;font-family:var(--fi);}
+.svc-tag{font-family:var(--fh);font-size:.55rem;letter-spacing:2px;color:var(--orange);text-transform:uppercase;text-align:right;opacity:0;transform:translateX(10px);transition:all .4s;}
+.svc-row:hover .svc-tag{opacity:1;transform:none;}
+
+/* ══════════ PRICING ══════════ */
+.pricing-section{background:var(--bg3);}
+.pricing-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,107,26,0.04),transparent);}
+.tab-row{display:flex;gap:0;border:1px solid var(--border2);width:fit-content;margin-bottom:3.5rem;}
+.tab-btn{background:transparent;border:none;color:var(--text2);padding:14px 44px;font-family:var(--fh);font-size:.62rem;letter-spacing:2.5px;cursor:pointer;transition:all .25s;text-transform:uppercase;}
+.tab-btn.active{background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;box-shadow:0 0 28px var(--og);}
+
+/* HORIZONTAL SCROLL PRICING */
+.price-scroll-wrap{position:relative;overflow:hidden;}
+.price-scroll-wrap::after{content:'';position:absolute;right:0;top:0;bottom:0;width:120px;background:linear-gradient(90deg,transparent,var(--bg3));pointer-events:none;z-index:2;}
+.price-scroll{display:flex;gap:1.5px;overflow-x:auto;padding-bottom:1rem;scrollbar-width:thin;scrollbar-color:var(--orange) transparent;-webkit-overflow-scrolling:touch;cursor:grab;}
+.price-scroll:active{cursor:grabbing;}
+.price-scroll::-webkit-scrollbar{height:3px;}
+.price-scroll::-webkit-scrollbar-track{background:transparent;}
+.price-scroll::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px;}
+.pc{min-width:280px;flex-shrink:0;background:rgba(5,3,5,0.96);backdrop-filter:blur(16px);padding:2.4rem 2rem;position:relative;border:1px solid rgba(255,107,26,0.1);transition:all .35s;}
+.pc:hover{border-color:var(--border2);transform:translateY(-6px);background:rgba(12,5,8,0.98);box-shadow:0 20px 60px rgba(0,0,0,0.5),0 0 0 1px rgba(255,107,26,0.15),0 0 30px rgba(255,107,26,0.06);}
+.pc.hot{border-color:rgba(255,107,26,0.3);}
+.pc.hot::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--orange),var(--red),transparent);}
+.pc.hot::after{content:'MOST POPULAR';position:absolute;top:1.4rem;right:1.4rem;background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;font-size:.48rem;letter-spacing:2px;padding:4px 10px;font-family:var(--fh);}
+.pc-tier{font-size:.55rem;letter-spacing:4px;color:var(--orange);font-family:var(--fh);text-transform:uppercase;margin-bottom:.5rem;}
+.pc-name{font-family:var(--fh);font-size:1rem;font-weight:700;letter-spacing:1px;margin-bottom:.5rem;}
+.pc-tag{color:var(--text2);font-size:.76rem;margin-bottom:1.5rem;padding-bottom:1.4rem;border-bottom:1px solid rgba(255,255,255,0.05);font-family:var(--fi);}
+.pc-setup{font-size:.7rem;color:var(--text2);margin-bottom:.25rem;font-family:var(--fi);}
+.pc-price{font-family:var(--fh);font-size:1.85rem;font-weight:900;margin-bottom:1.6rem;background:linear-gradient(135deg,#fff,rgba(255,200,150,0.8));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.pc-price span{font-size:.68rem;color:var(--text2);font-weight:400;-webkit-text-fill-color:var(--text2);}
+.pc-feats{list-style:none;margin-bottom:1.8rem;}
+.pc-feats li{padding:6px 0;font-size:.83rem;color:var(--text2);display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,0.04);font-family:var(--fi);}
+.pc-feats li::before{content:'';width:4px;height:4px;background:var(--orange);flex-shrink:0;box-shadow:0 0 8px var(--og);}
+.pc-btn{width:100%;background:transparent;border:1px solid rgba(255,107,26,0.3);color:var(--text2);padding:13px;font-family:var(--fh);font-size:.58rem;letter-spacing:2px;cursor:pointer;transition:all .28s;text-transform:uppercase;}
+.pc-btn:hover,.pc.hot .pc-btn{background:linear-gradient(135deg,var(--orange),var(--red));border-color:var(--orange);color:#fff;box-shadow:0 0 24px var(--og);}
+.scroll-hint{display:flex;align-items:center;gap:10px;margin-top:1.5rem;color:var(--text2);font-size:.72rem;font-family:var(--fi);}
+.scroll-hint::before{content:'←';}.scroll-hint::after{content:'→';}
+.hidden{display:none!important;}
+
+/* ══════════ CONTACT ══════════ */
+.contact-section{background:var(--bg4);}
+.contact-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 100%,rgba(255,107,26,0.06),transparent);}
+.contact-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:6rem;margin-top:5rem;align-items:start;}
+.ci h3{font-family:var(--fh);font-size:.8rem;letter-spacing:2.5px;color:var(--orange);margin-bottom:1.2rem;}
+.ci p{color:var(--text2);font-size:.95rem;line-height:1.95;margin-bottom:2.5rem;font-family:var(--fi);}
+.cdet{display:flex;align-items:flex-start;gap:16px;padding:1.2rem 1.5rem;background:rgba(0,0,0,0.6);border:1px solid rgba(255,107,26,0.1);margin-bottom:.8rem;transition:all .3s;position:relative;overflow:hidden;}
+.cdet::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--orange),var(--red));transform:scaleY(0);transition:transform .3s;}
+.cdet:hover{border-color:rgba(255,107,26,0.3);transform:translateX(6px);}
+.cdet:hover::before{transform:scaleY(1);}
+.cdet-icon{font-size:.95rem;flex-shrink:0;margin-top:3px;}
+.cdet strong{display:block;font-size:.58rem;letter-spacing:2px;font-family:var(--fh);color:var(--text3);margin-bottom:4px;text-transform:uppercase;}
+.cdet span{color:var(--text2);font-size:.88rem;font-family:var(--fi);}
+.cbox{margin-top:2rem;padding:1.6rem;background:rgba(255,107,26,0.05);border:1px solid rgba(255,107,26,0.2);border-left:2px solid var(--orange);}
+.cbox p{margin:0;font-size:.87rem;color:var(--text2);line-height:1.8;font-family:var(--fi);}
+.cform{display:flex;flex-direction:column;gap:.9rem;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.fg{display:flex;flex-direction:column;gap:7px;}
+.fg label{font-size:.57rem;letter-spacing:2.5px;color:var(--text2);text-transform:uppercase;font-family:var(--fh);}
+.fg input,.fg textarea,.fg select{background:rgba(255,255,255,0.02);border:1px solid rgba(255,107,26,0.12);color:#fff;padding:14px 16px;font-family:var(--fi);font-size:.93rem;outline:none;transition:all .28s;width:100%;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--orange);background:rgba(255,107,26,0.04);box-shadow:0 0 20px rgba(255,107,26,0.1);}
+.fg textarea{resize:vertical;min-height:120px;}
+.fg select option{background:#0a0508;}
+.forge-btn{width:100%;background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;border:none;padding:19px;font-family:var(--fh);font-size:.67rem;letter-spacing:2.5px;cursor:pointer;transition:all .3s;text-transform:uppercase;position:relative;overflow:hidden;clip-path:polygon(12px 0%,100% 0%,100% calc(100% - 12px),calc(100% - 12px) 100%,0% 100%,0% 12px);}
+.forge-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:translateX(-100%);transition:transform .6s;}
+.forge-btn:hover::after{transform:translateX(100%);}
+.forge-btn:hover{box-shadow:0 0 48px var(--og);transform:translateY(-2px);}
+
+/* ══════════ FOOTER ══════════ */
+footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255,107,26,0.1);padding:3rem 6%;}
+.foot-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.foot-logo{font-family:var(--fh);font-size:.82rem;letter-spacing:2.5px;color:#fff;display:flex;align-items:center;gap:10px;}
+.foot-logo .ai{color:var(--orange);}
+.foot-mid{color:rgba(255,255,255,0.18);font-size:.75rem;font-family:var(--fi);}
+.foot-email{color:var(--orange);font-size:.75rem;font-family:var(--fi);}
+
+/* ══════════ CHATBOT ══════════ */
+.chat-fab{position:fixed;bottom:2.2rem;right:2.2rem;z-index:9999;width:62px;height:62px;background:linear-gradient(135deg,var(--orange),var(--red));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);box-shadow:0 0 0 0 rgba(255,107,26,.55);animation:fabPulse 2.5s infinite;transition:transform .2s;}
+@keyframes fabPulse{0%{box-shadow:0 0 0 0 rgba(255,107,26,.55);}70%{box-shadow:0 0 0 18px rgba(255,107,26,0);}100%{box-shadow:0 0 0 0 rgba(255,107,26,0);}}
+.chat-fab:hover{transform:scale(1.1);animation:none;box-shadow:0 0 42px var(--og);}
+.chat-fab svg{width:26px;height:26px;fill:#fff;}
+.chat-win{position:fixed;bottom:6.2rem;right:2.2rem;z-index:9998;width:390px;background:rgba(4,2,4,0.99);backdrop-filter:blur(30px);border:1px solid rgba(255,107,26,0.3);display:flex;flex-direction:column;box-shadow:0 36px 100px rgba(0,0,0,.9);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1);}
+.chat-win.open{transform:none;opacity:1;pointer-events:all;}
+.chat-head{background:linear-gradient(135deg,#0a0508,#100a0c);border-bottom:1px solid rgba(255,107,26,0.15);padding:1rem 1.3rem;display:flex;align-items:center;justify-content:space-between;}
+.chat-head-l{display:flex;align-items:center;gap:13px;}
+.chat-av{width:40px;height:40px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:.55rem;color:#fff;flex-shrink:0;position:relative;clip-path:polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px);}
+.chat-av::after{content:'';position:absolute;bottom:1px;right:1px;width:9px;height:9px;background:#22c55e;border-radius:50%;border:2px solid #0a0508;}
+.chat-nm{font-family:var(--fh);font-size:.7rem;letter-spacing:1.5px;color:#fff;}
+.chat-st{font-size:.67rem;color:#22c55e;margin-top:2px;font-family:var(--fi);}
+.chat-x{background:none;border:none;color:var(--text2);cursor:pointer;font-size:1.1rem;padding:4px;transition:color .2s;}
+.chat-x:hover{color:var(--orange);}
+.chat-msgs{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem;min-height:200px;max-height:345px;}
+.chat-msgs::-webkit-scrollbar{width:3px;}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--orange);}
+.msg{max-width:90%;padding:11px 15px;font-size:.86rem;line-height:1.6;font-family:var(--fi);}
+.msg.bot{background:rgba(10,5,8,.95);color:#fff;border:1px solid rgba(255,107,26,0.1);align-self:flex-start;border-radius:2px 10px 10px 10px;}
+.msg.user{background:linear-gradient(135deg,var(--orange),var(--red));color:#fff;align-self:flex-end;border-radius:10px 2px 10px 10px;}
+.tw{display:flex;gap:5px;align-items:center;padding:5px 0;}
+.dot{width:5px;height:5px;background:var(--text2);border-radius:50%;animation:bou 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}.dot:nth-child(3){animation-delay:.4s;}
+@keyframes bou{0%,60%,100%{transform:none;}30%{transform:translateY(-6px);}}
+.suggs{padding:.5rem 1rem;display:flex;flex-wrap:wrap;gap:6px;border-top:1px solid rgba(255,107,26,0.1);}
+.sg{background:transparent;border:1px solid rgba(255,107,26,0.15);color:var(--text2);padding:5px 12px;font-size:.63rem;cursor:pointer;transition:all .2s;font-family:var(--fh);}
+.sg:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,107,26,0.06);}
+.chat-inp-row{border-top:1px solid rgba(255,107,26,0.1);padding:.8rem 1rem;display:flex;gap:8px;}
+.chat-inp{flex:1;background:rgba(255,255,255,0.02);border:1px solid rgba(255,107,26,0.12);color:#fff;padding:11px 14px;font-family:var(--fi);font-size:.88rem;outline:none;transition:border .2s;}
+.chat-inp:focus{border-color:var(--orange);}
+.chat-snd{background:linear-gradient(135deg,var(--orange),var(--red));border:none;color:#fff;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;clip-path:polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px);}
+.chat-snd:hover{box-shadow:0 0 16px var(--og);}
+.chat-snd svg{width:17px;height:17px;fill:#fff;}
+
+@media(max-width:900px){
+  .nav-links{display:none;}
+  .intro-grid{grid-template-columns:1fr;}
+  .intro-visual{display:none;}
+  .svc-row{grid-template-columns:50px 1fr;gap:1.5rem;}
+  .svc-info{grid-column:2;}
+  .svc-tag{display:none;}
+  .contact-grid{grid-template-columns:1fr;}
+  .frow{grid-template-columns:1fr;}
+  .chat-win{width:calc(100vw - 2rem);right:1rem;}
+  .stat-box{padding:1.2rem 2rem;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="forgeCanvas"></canvas>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#home"><span class="ai">AI</span><div class="forge-spark"></div>FORGE AUTOMATION</a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})"><span>Book a Call</span></button>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <canvas id="heroForgeCanvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-btm"></div>
+  <div class="hero-content">
+    <div class="hero-badge" style="display:inline-flex;align-items:center;gap:12px;border:1px solid rgba(255,107,26,0.35);background:rgba(255,107,26,0.06);font-family:var(--fh);font-size:.58rem;letter-spacing:4px;color:var(--orange);padding:8px 24px;margin-bottom:2.5rem;text-transform:uppercase;opacity:0;animation:fadeUp .8s .1s forwards;">
+      <span style="width:18px;height:1px;background:var(--orange);display:block;"></span>
+      Forging The Future of Business
+      <span style="width:18px;height:1px;background:var(--orange);display:block;"></span>
+    </div>
+    <div class="forge-title" id="forgeTitle" aria-label="AUTOMATE. DOMINATE. SCALE."></div>
+    <p class="hero-sub">We don't build tools. We forge intelligent systems — hammered from fire, precision-engineered to eliminate manual work, capture every lead, and dominate your market 24/7.</p>
+    <div class="hero-btns">
+      <button class="btn-forge" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Free Strategy Call</button>
+      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Our Work</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-box"><div class="stat-n">7+</div><div class="stat-l">AI Packages</div></div>
+      <div class="stat-box"><div class="stat-n">24/7</div><div class="stat-l">Always On</div></div>
+      <div class="stat-box"><div class="stat-n">100%</div><div class="stat-l">Done For You</div></div>
+      <div class="stat-box"><div class="stat-n">∞</div><div class="stat-l">Scalability</div></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="scroll-fire"></div></div>
+</section>
+
+<div class="molten-divider"></div>
+
+<!-- ══ ABOUT ══ -->
+<section id="about" style="
+  position:relative;
+  z-index:1;
+  padding:130px 6%;
+  background-image: url('https://images.pexels.com/photos/33343627/pexels-photo-33343627.jpeg?auto=compress&cs=tinysrgb&w=1920&fit=max');
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  overflow:hidden;
+">
+  <!-- Dark overlay so text is readable -->
+  <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.87) 0%,rgba(3,1,0,0.80) 50%,rgba(0,0,0,0.87) 100%);z-index:0;"></div>
+
+  <!-- Animated sparks canvas on top of photo -->
+  <canvas id="aboutSparkCanvas" style="position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;"></canvas>
+
+  <!-- Content -->
+  <div class="wrap" style="position:relative;z-index:2;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8rem;align-items:center;">
+
+      <!-- Left: text -->
+      <div>
+        <div class="ed-label rv">The Forge</div>
+        <h2 class="big-title rv rv1">We Turn Raw Business<br>Into <em>Refined Power</em></h2>
+        <div class="fire-bar rv rv2"></div>
+        <p class="rv rv2" style="font-size:1.2rem;color:rgba(255,255,255,0.88);font-weight:300;line-height:1.8;margin-bottom:1.5rem;font-family:var(--fi);">
+          Just like a blacksmith transforms raw iron into something unbreakable, we take your raw business operations and forge them into precision AI-powered systems that work without you.
+        </p>
+        <p class="rv rv3" style="font-size:.95rem;color:rgba(255,255,255,0.55);line-height:1.9;font-family:var(--fi);">
+          From your first professional website to a fully automated enterprise system — every solution is hammered, shaped, and tempered until it's exactly right. We don't ship until it's forged to perfection.
+        </p>
+        <div class="rv rv4" style="display:flex;gap:1.2rem;margin-top:2.5rem;flex-wrap:wrap;">
+          <div style="background:rgba(0,0,0,0.6);backdrop-filter:blur(14px);border:1px solid rgba(255,107,26,0.3);padding:1.2rem 1.8rem;min-width:110px;text-align:center;">
+            <div style="font-family:var(--fh);font-size:1.5rem;font-weight:900;color:var(--orange);text-shadow:0 0 18px var(--og);">AI</div>
+            <div style="font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,0.4);text-transform:uppercase;font-family:var(--fb);margin-top:5px;">Powered</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.6);backdrop-filter:blur(14px);border:1px solid rgba(255,107,26,0.3);padding:1.2rem 1.8rem;min-width:110px;text-align:center;">
+            <div style="font-family:var(--fh);font-size:1.5rem;font-weight:900;color:var(--orange);text-shadow:0 0 18px var(--og);">DFY</div>
+            <div style="font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,0.4);text-transform:uppercase;font-family:var(--fb);margin-top:5px;">Done For You</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.6);backdrop-filter:blur(14px);border:1px solid rgba(255,107,26,0.3);padding:1.2rem 1.8rem;min-width:110px;text-align:center;">
+            <div style="font-family:var(--fh);font-size:1.5rem;font-weight:900;color:var(--orange);text-shadow:0 0 18px var(--og);">24/7</div>
+            <div style="font-size:.58rem;letter-spacing:2px;color:rgba(255,255,255,0.4);text-transform:uppercase;font-family:var(--fb);margin-top:5px;">Always Live</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: glassmorphism cards -->
+      <div class="rv rv2" style="display:flex;flex-direction:column;gap:1.2rem;">
+        <div style="background:rgba(0,0,0,0.58);backdrop-filter:blur(18px);border:1px solid rgba(255,107,26,0.22);border-left:2px solid var(--orange);padding:1.8rem 2rem;">
+          <div style="font-family:var(--fh);font-size:.58rem;letter-spacing:3px;color:var(--orange);margin-bottom:.7rem;text-transform:uppercase;">Our Process</div>
+          <p style="font-size:.93rem;color:rgba(255,255,255,0.62);line-height:1.85;font-family:var(--fi);">We audit your operations, map every bottleneck, then engineer a custom AI system that eliminates them — permanently. No templates. Built from scratch for you.</p>
+        </div>
+        <div style="background:rgba(0,0,0,0.58);backdrop-filter:blur(18px);border:1px solid rgba(232,25,44,0.22);border-left:2px solid var(--red);padding:1.8rem 2rem;">
+          <div style="font-family:var(--fh);font-size:.58rem;letter-spacing:3px;color:var(--red);margin-bottom:.7rem;text-transform:uppercase;">Our Promise</div>
+          <p style="font-size:.93rem;color:rgba(255,255,255,0.62);line-height:1.85;font-family:var(--fi);">Every system comes with a guarantee — if it doesn't perform, we keep working until it does. We don't walk away until your business runs on autopilot.</p>
+        </div>
+        <div style="background:rgba(0,0,0,0.58);backdrop-filter:blur(18px);border:1px solid rgba(255,107,26,0.22);border-left:2px solid var(--orange);padding:1.8rem 2rem;">
+          <div style="font-family:var(--fh);font-size:.58rem;letter-spacing:3px;color:var(--orange);margin-bottom:.7rem;text-transform:uppercase;">Our Standard</div>
+          <p style="font-size:.93rem;color:rgba(255,255,255,0.62);line-height:1.85;font-family:var(--fi);">Hammered until perfect, tested under pressure, built to last far longer than anything off the shelf. That is the AI Forge standard — non-negotiable.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="molten-divider"></div>
+
+<!-- ══ SERVICES ══ -->
+<section class="services-section" id="services">
+  <div class="wrap" style="position:relative;z-index:1;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;margin-bottom:1rem;">
+      <div>
+        <div class="ed-label rv">What We Forge</div>
+        <h2 class="big-title rv rv1">Six Services.<br><em>One Standard.</em></h2>
+        <div class="fire-bar rv rv2"></div>
+      </div>
+      <p class="body-text rv rv2" style="padding-bottom:.5rem;">Every service we offer is built to the same uncompromising standard — engineered for performance, forged for longevity, delivered with precision.</p>
+    </div>
+    <div class="svc-rows rv rv2">
+      <div class="svc-row">
+        <div class="svc-num">01</div>
+        <div class="svc-icon-wrap">⚡</div>
+        <div class="svc-info"><h3>Web Presence</h3><p>Professional websites engineered to convert visitors into clients — from fast static sites to fully-managed CMS platforms you control without writing a line of code.</p></div>
+        <div class="svc-tag">From $180/mo →</div>
+      </div>
+      <div class="svc-row">
+        <div class="svc-num">02</div>
+        <div class="svc-icon-wrap">🎯</div>
+        <div class="svc-info"><h3>Lead Generation</h3><p>High-converting funnels, lead capture forms and strategic pop-ups, precision-engineered to turn every visitor into a qualified prospect and every prospect into a paying customer.</p></div>
+        <div class="svc-tag">From $360/mo →</div>
+      </div>
+      <div class="svc-row">
+        <div class="svc-num">03</div>
+        <div class="svc-icon-wrap">🤖</div>
+        <div class="svc-info"><h3>AI Chatbot & Automation</h3><p>Intelligent AI systems that qualify leads, answer questions and route clients 24/7 with zero manual input. Your business works while you sleep — and when you're on holiday.</p></div>
+        <div class="svc-tag">From $630/mo →</div>
+      </div>
+      <div class="svc-row">
+        <div class="svc-num">04</div>
+        <div class="svc-icon-wrap">📱</div>
+        <div class="svc-info"><h3>WhatsApp & Follow-Up Systems</h3><p>Automated WhatsApp sequences and intelligent follow-up flows that keep your pipeline warm — ensuring no lead ever falls through the cracks again, day or night.</p></div>
+        <div class="svc-tag">From $900/mo →</div>
+      </div>
+      <div class="svc-row">
+        <div class="svc-num">05</div>
+        <div class="svc-icon-wrap">🏗️</div>
+        <div class="svc-info"><h3>Custom ERP Systems</h3><p>All-in-one business operating systems — CRM, workflows, sales pipelines and full automation forged into a single, unified platform. Built for businesses that are ready to scale without limits.</p></div>
+        <div class="svc-tag">From $1,260/mo →</div>
+      </div>
+      <div class="svc-row">
+        <div class="svc-num">06</div>
+        <div class="svc-icon-wrap">📣</div>
+        <div class="svc-info"><h3>Social Media Management</h3><p>Cinematic reels, curated posts, custom graphics, professional camera shoots and viral hook strategies — content forged to dominate every feed and convert followers into revenue.</p></div>
+        <div class="svc-tag">From $400/mo →</form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="molten-divider"></div>
+
+<!-- ══ PRICING ══ -->
+<section class="pricing-section" id="pricing">
+  <div class="wrap" style="position:relative;z-index:1;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:end;margin-bottom:1rem;">
+      <div>
+        <div class="ed-label rv">Investment</div>
+        <h2 class="big-title rv rv1">Transparent.<br><em>No Surprises.</em></h2>
+        <div class="fire-bar rv rv2"></div>
+      </div>
+      <p class="body-text rv rv2" style="padding-bottom:.5rem;">Every package is built on a foundation of honesty. You know exactly what you're getting, what it costs, and what it will do for your business — before you sign anything.</p>
+    </div>
+    <div class="tab-row rv rv3">
+      <button class="tab-btn active" onclick="switchTab('ai',this)">AI Automation</button>
+      <button class="tab-btn" onclick="switchTab('smm',this)">Social Media</button>
+    </div>
+    <div id="tab-ai">
+      <div class="price-scroll-wrap rv rv4">
+        <div class="price-scroll" id="aiScroll">
+          <div class="pc"><div class="pc-tier">Tier 1</div><div class="pc-name">Starter</div><div class="pc-tag">First website, solid presence</div><div class="pc-setup">Setup: $720</div><div class="pc-price">$180<span>/mo</span></div><ul class="pc-feats"><li>Professional static website</li><li>Brand, services & contact</li><li>Fast launch — no tech needed</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc"><div class="pc-tier">Tier 2</div><div class="pc-name">Growth</div><div class="pc-tag">DIY content updates with CMS</div><div class="pc-setup">Setup: $900</div><div class="pc-price">$270<span>/mo</span></div><ul class="pc-feats"><li>Everything in Starter</li><li>Content Management System</li><li>Edit text & images yourself</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc"><div class="pc-tier">Tier 3</div><div class="pc-name">Marketing</div><div class="pc-tag">Blog + SEO + email marketing</div><div class="pc-setup">Setup: $1,260</div><div class="pc-price">$360<span>/mo</span></div><ul class="pc-feats"><li>Everything in Growth</li><li>Built-in blog for SEO</li><li>Email notification system</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc"><div class="pc-tier">Tier 4</div><div class="pc-name">Conversion</div><div class="pc-tag">Lead gen forms & funnels</div><div class="pc-setup">Setup: $1,800</div><div class="pc-price">$360<span>/mo</span></div><ul class="pc-feats"><li>Everything in Marketing</li><li>Lead capture & pop-ups</li><li>Sales funnel optimization</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc hot"><div class="pc-tier">Tier 5</div><div class="pc-name">Automation</div><div class="pc-tag">AI chatbot + lead qualification</div><div class="pc-setup">Setup: $2,700</div><div class="pc-price">$630<span>/mo</span></div><ul class="pc-feats"><li>Everything in Conversion</li><li>AI chatbot — 24/7 active</li><li>Auto-routes potential clients</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc"><div class="pc-tier">Tier 6</div><div class="pc-name">Scale</div><div class="pc-tag">WhatsApp + call center</div><div class="pc-setup">Setup: $4,500</div><div class="pc-price">$900<span>/mo</span></div><ul class="pc-feats"><li>Everything in Automation</li><li>WhatsApp integration</li><li>Automated follow-ups</li><li>Call center features</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc"><div class="pc-tier">Tier 7</div><div class="pc-name">Enterprise</div><div class="pc-tag">Full ERP + all operations</div><div class="pc-setup">Setup: $6,300</div><div class="pc-price">$1,260<span>/mo</span></div><ul class="pc-feats"><li>Everything in Scale</li><li>Custom ERP system</li><li>CRM & full automation</li><li>End-to-end operations</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+        </div>
+      </div>
+      <div class="scroll-hint rv" style="color:var(--text2);font-size:.72rem;font-family:var(--fi);margin-top:1rem;display:flex;align-items:center;gap:10px;">Swipe to explore all 7 packages</div>
+    </div>
+    <div id="tab-smm" class="hidden">
+      <div class="price-scroll-wrap rv rv4">
+        <div class="price-scroll">
+          <div class="pc"><div class="pc-tier">SMM Starter</div><div class="pc-name">Starter</div><div class="pc-tag">Launch Your Presence</div><div class="pc-price">$400<span>/mo</span></div><ul class="pc-feats"><li>6 Professional Reels</li><li>5 Curated Feed Posts</li><li>Full Content Creation</li><li>Copy, captions & hashtags</li><li>Monthly Performance Report</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc hot"><div class="pc-tier">SMM Professional</div><div class="pc-name">Professional</div><div class="pc-tag">Amplify Your Brand</div><div class="pc-price">$600<span>/mo</span></div><ul class="pc-feats"><li>8 Professional Reels</li><li>7 Curated Feed Posts</li><li>Custom Graphic Design</li><li>Professional Camera Shoot</li><li>Bi-weekly Strategy Call</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+          <div class="pc"><div class="pc-tier">SMM Elite</div><div class="pc-name">Elite</div><div class="pc-tag">Dominate Your Market</div><div class="pc-price">$1,000<span>/mo</span></div><ul class="pc-feats"><li>12 Professional Reels</li><li>10 Curated Feed Posts</li><li>Exclusive Hooks Strategy</li><li>Premium Multi-location Shoots</li><li>Priority Support & Revisions</li></ul><button class="pc-btn" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button></div>
+        </div>
+      </div>
+      <p style="margin-top:1.2rem;color:var(--text2);font-size:.78rem;font-style:italic;font-family:var(--fi);">All SMM packages include onboarding consultation, content calendar & monthly analytics report.</p>
+    </div>
+  </div>
+</section>
+
+<div class="molten-divider"></div>
+
+<!-- ══ CONTACT ══ -->
+<section class="contact-section" id="contact">
+  <div class="wrap" style="position:relative;z-index:1;">
+    <div style="text-align:center;margin-bottom:1rem;">
+      <div class="ed-label rv" style="justify-content:center;">Start Your Forge</div>
+      <h2 class="big-title rv rv1" style="text-align:center;">Ready to Build<br>Something <em>Legendary?</em></h2>
+      <div class="fire-bar rv rv2" style="margin:1.5rem auto;"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="rv rv2">
+        <div class="ci"><h3>Book a Free Strategy Call</h3><p>Every great system starts with a conversation. Tell us about your business and we'll forge a plan that fits — no fluff, no pressure, just clear direction and real solutions.</p></div>
+        <div class="cdet"><div class="cdet-icon">📧</div><div><strong>Email</strong><span>ahmad@forgeaiautomations.net</span></div></div>
+        <div class="cdet"><div class="cdet-icon">⚡</div><div><strong>Response Time</strong><span>Direct — same day</span></div></div>
+        <div class="cdet"><div class="cdet-icon">🌍</div><div><strong>Availability</strong><span>Serving clients worldwide</span></div></div>
+        <div class="cbox"><p>💡 <strong style="color:#fff">Not sure which package fits?</strong> Open the AI assistant — it knows every package inside out and will recommend the perfect fit in under 60 seconds.</p></div>
+      </div>
+      <div class="rv rv3">
+        <form class="cform" id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" required></div></div>
+          <div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..."></div>
+          <div class="fg"><label>Interested In</label>
+            <select>
+              <option value="">Select a service...</option>
+              <option>AI — Starter ($180/mo)</option><option>AI — Growth ($270/mo)</option><option>AI — Marketing ($360/mo)</option><option>AI — Conversion ($360/mo)</option><option>AI — Automation ($630/mo)</option><option>AI — Scale ($900/mo)</option><option>AI — Enterprise ($1,260/mo)</option>
+              <option>SMM — Starter ($400/mo)</option><option>SMM — Professional ($600/mo)</option><option>SMM — Elite ($1,000/mo)</option>
+              <option>Not sure — need advice</option>
+            </select>
+          </div>
+          <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
+          <button class="forge-btn" onclick="alert('Message forged & sent!\n\nWe\'ll be in touch same day.\nDirect: ahmad@forgeaiautomations.net')">Forge Your Message →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-logo"><span class="ai">AI</span> FORGE AUTOMATION</div>
+    <div class="foot-mid">© 2025 AI Forge Automation. Forged with precision. All rights reserved.</div>
+    <div class="foot-email">ahmad@forgeaiautomations.net</div>
+  </div>
+</footer>
+
+<button class="chat-fab" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
+<div class="chat-win" id="chatWin">
+  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat()">✕</button></div>
+  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
+  <div class="suggs" id="suggs">
+    <button class="sg" onclick="qa('What services do you offer?')">Services</button>
+    <button class="sg" onclick="qa('Show me your pricing')">Pricing</button>
+    <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
+    <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
+  </div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+</div>
+
+<script>
+/* ══ GLOBAL FORGE CANVAS — sparks & embers ══ */
+(function(){
+  const c=document.getElementById('forgeCanvas'),x=c.getContext('2d');
+  let W,H,t=0;
+  const sparks=[],embers=[];
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  // Embers — slow floating particles
+  for(let i=0;i<60;i++)embers.push({x:Math.random()*2000,y:Math.random()*2000,vx:(Math.random()-.5)*.3,vy:-(Math.random()*.4+.1),r:Math.random()*2+.5,life:Math.random(),decay:Math.random()*.003+.001,hue:Math.random()*40+10});
+  function spawnSpark(){
+    if(sparks.length<40&&Math.random()<.15){
+      const x2=Math.random()*W;
+      sparks.push({x:x2,y:H*.6+Math.random()*H*.4,vx:(Math.random()-.5)*3,vy:-(Math.random()*4+2),life:1,decay:Math.random()*.04+.02,r:Math.random()*2.5+.5,hue:Math.random()*40+10});
+    }
+  }
+  function draw(){
+    t+=.008;x.clearRect(0,0,W,H);
+    // Deep forge atmosphere
+    const bg=x.createRadialGradient(W*.5,H*.7,0,W*.5,H*.5,Math.max(W,H)*.9);
+    bg.addColorStop(0,'rgba(20,5,0,.96)');bg.addColorStop(.3,'rgba(10,3,0,.94)');bg.addColorStop(.7,'rgba(5,2,0,.92)');bg.addColorStop(1,'rgba(0,0,0,.97)');
+    x.fillStyle=bg;x.fillRect(0,0,W,H);
+    // Forge glow from bottom
+    const fg=x.createRadialGradient(W*.5,H,0,W*.5,H,W*.8);
+    fg.addColorStop(0,`rgba(255,80,0,${.06+.03*Math.sin(t*.5)})`);
+    fg.addColorStop(.3,`rgba(200,40,0,${.04+.02*Math.sin(t*.4)})`);
+    fg.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=fg;x.fillRect(0,0,W,H);
+    // Secondary heat glow left
+    const hg=x.createRadialGradient(W*.2,H*.6,0,W*.2,H*.6,W*.4);
+    hg.addColorStop(0,`rgba(255,60,0,${.03+.015*Math.sin(t*.6+1)})`);hg.addColorStop(1,'rgba(0,0,0,0)');
+    x.fillStyle=hg;x.fillRect(0,0,W,H);
+    // Embers
+    embers.forEach(e=>{
+      e.x+=e.vx;e.y+=e.vy;e.life-=e.decay;
+      if(e.life<=0||e.y<-10){e.x=Math.random()*W;e.y=H+10;e.life=1;e.vy=-(Math.random()*.4+.1);}
+      const a=e.life*.6;
+      x.beginPath();x.arc(e.x,e.y,e.r*e.life,0,Math.PI*2);
+      x.fillStyle=`hsla(${e.hue},100%,60%,${a})`;x.fill();
+      if(e.r>1){const eg=x.createRadialGradient(e.x,e.y,0,e.x,e.y,e.r*3);eg.addColorStop(0,`hsla(${e.hue},100%,70%,${a*.4})`);eg.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=eg;x.beginPath();x.arc(e.x,e.y,e.r*3,0,Math.PI*2);x.fill();}
+    });
+    // Sparks
+    spawnSpark();
+    for(let i=sparks.length-1;i>=0;i--){
+      const s=sparks[i];s.x+=s.vx;s.y+=s.vy;s.vy+=.08;s.life-=s.decay;
+      if(s.life<=0){sparks.splice(i,1);continue;}
+      x.beginPath();x.arc(s.x,s.y,s.r*s.life,0,Math.PI*2);
+      x.fillStyle=`hsla(${s.hue},100%,65%,${s.life})`;x.fill();
+      // Spark trail
+      x.beginPath();x.moveTo(s.x,s.y);x.lineTo(s.x-s.vx*4,s.y-s.vy*4);
+      const tg=x.createLinearGradient(s.x,s.y,s.x-s.vx*4,s.y-s.vy*4);
+      tg.addColorStop(0,`hsla(${s.hue},100%,65%,${s.life*.8})`);tg.addColorStop(1,'rgba(0,0,0,0)');
+      x.strokeStyle=tg;x.lineWidth=s.r*.8;x.stroke();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ HERO FORGE CANVAS — molten forge scene ══ */
+(function(){
+  const c=document.getElementById('heroForgeCanvas'),ctx=c.getContext('2d');
+  let W,H,t=0;
+  function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
+  resize();window.addEventListener('resize',resize);
+  const sparks2=[];
+  function draw(){
+    t+=.01;ctx.clearRect(0,0,W,H);
+    // Molten core glow at bottom center
+    const mg=ctx.createRadialGradient(W*.5,H*.85,0,W*.5,H*.85,W*.6);
+    mg.addColorStop(0,`rgba(255,120,0,${.18+.08*Math.sin(t*.4)})`);
+    mg.addColorStop(.2,`rgba(255,60,0,${.12+.05*Math.sin(t*.3)})`);
+    mg.addColorStop(.5,`rgba(180,20,0,${.06+.03*Math.sin(t*.5)})`);
+    mg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=mg;ctx.fillRect(0,0,W,H);
+    // Left heat glow
+    const lg=ctx.createRadialGradient(W*.1,H*.5,0,W*.1,H*.5,W*.35);
+    lg.addColorStop(0,`rgba(255,80,0,${.08+.04*Math.sin(t*.6+1)})`);lg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=lg;ctx.fillRect(0,0,W,H);
+    // Right heat glow
+    const rg=ctx.createRadialGradient(W*.9,H*.4,0,W*.9,H*.4,W*.3);
+    rg.addColorStop(0,`rgba(200,40,0,${.06+.03*Math.sin(t*.5+2)})`);rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+    // Forge sparks rising
+    if(sparks2.length<80&&Math.random()<.35){
+      const baseX=W*.5+(Math.random()-.5)*W*.6;
+      sparks2.push({x:baseX,y:H*.9+Math.random()*H*.1,vx:(Math.random()-.5)*2.5,vy:-(Math.random()*3+1.5),life:1,decay:Math.random()*.025+.015,r:Math.random()*2.5+.3,hue:Math.random()*50+5,trail:[]});
+    }
+    for(let i=sparks2.length-1;i>=0;i--){
+      const s=sparks2[i];
+      s.trail.push({x:s.x,y:s.y});if(s.trail.length>8)s.trail.shift();
+      s.x+=s.vx;s.y+=s.vy;s.vy+=.04;s.vx*=.99;s.life-=s.decay;
+      if(s.life<=0){sparks2.splice(i,1);continue;}
+      // Trail
+      s.trail.forEach((p,idx)=>{const a=(idx/s.trail.length)*s.life*.5;ctx.beginPath();ctx.arc(p.x,p.y,s.r*(idx/s.trail.length)*.6,0,Math.PI*2);ctx.fillStyle=`hsla(${s.hue},100%,65%,${a})`;ctx.fill();});
+      // Spark
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*s.life,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${s.hue},100%,70%,${s.life})`;ctx.fill();
+      const sg=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*4);
+      sg.addColorStop(0,`hsla(${s.hue},100%,80%,${s.life*.35})`);sg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=sg;ctx.beginPath();ctx.arc(s.x,s.y,s.r*4,0,Math.PI*2);ctx.fill();
+    }
+    // Molten liquid at bottom — sine wave
+    ctx.beginPath();ctx.moveTo(0,H);
+    for(let xx=0;xx<=W;xx+=4){
+      const yy=H*.88+Math.sin(xx*.015+t)*12+Math.sin(xx*.025-t*.7)*8;
+      ctx.lineTo(xx,yy);
+    }
+    ctx.lineTo(W,H);ctx.closePath();
+    const lava=ctx.createLinearGradient(0,H*.85,0,H);
+    lava.addColorStop(0,`rgba(255,100,0,${.35+.15*Math.sin(t*.4)})`);
+    lava.addColorStop(.5,`rgba(255,50,0,${.25+.1*Math.sin(t*.3)})`);
+    lava.addColorStop(1,'rgba(150,20,0,.4)');
+    ctx.fillStyle=lava;ctx.fill();
+    // Molten glow line on top of lava
+    ctx.beginPath();
+    for(let xx=0;xx<=W;xx+=4){const yy=H*.88+Math.sin(xx*.015+t)*12+Math.sin(xx*.025-t*.7)*8;xx===0?ctx.moveTo(xx,yy):ctx.lineTo(xx,yy);}
+    ctx.strokeStyle=`rgba(255,180,50,${.6+.3*Math.sin(t*.5)})`;ctx.lineWidth=2;ctx.stroke();
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ ABOUT SECTION SPARK CANVAS ══ */
+(function(){
+  const c=document.getElementById('aboutSparkCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  let W,H,t=0;
+  const sparks=[];
+  function resize(){
+    const rect=c.parentElement.getBoundingClientRect();
+    W=c.width=c.offsetWidth||window.innerWidth;
+    H=c.height=c.offsetHeight||600;
+  }
+  resize();
+  new ResizeObserver(resize).observe(c.parentElement);
+  function spawnSpark(){
+    if(sparks.length<120&&Math.random()<.25){
+      sparks.push({
+        x:Math.random()*W,
+        y:H*0.5+Math.random()*H*0.5,
+        vx:(Math.random()-.5)*3.5,
+        vy:-(Math.random()*4+2),
+        life:1,
+        decay:Math.random()*.03+.018,
+        r:Math.random()*2.5+.4,
+        hue:Math.random()*40+8,
+        trail:[]
+      });
+    }
+  }
+  function draw(){
+    t+=.01;
+    ctx.clearRect(0,0,W,H);
+    spawnSpark();
+    for(let i=sparks.length-1;i>=0;i--){
+      const s=sparks[i];
+      s.trail.push({x:s.x,y:s.y});
+      if(s.trail.length>10)s.trail.shift();
+      s.x+=s.vx;s.y+=s.vy;s.vy+=.06;s.vx*=.98;s.life-=s.decay;
+      if(s.life<=0){sparks.splice(i,1);continue;}
+      s.trail.forEach((p,idx)=>{
+        const a=(idx/s.trail.length)*s.life*.45;
+        ctx.beginPath();ctx.arc(p.x,p.y,s.r*(idx/s.trail.length)*.55,0,Math.PI*2);
+        ctx.fillStyle=`hsla(${s.hue},100%,65%,${a})`;ctx.fill();
+      });
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r*s.life,0,Math.PI*2);
+      ctx.fillStyle=`hsla(${s.hue},100%,72%,${s.life})`;ctx.fill();
+      const sg=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*5);
+      sg.addColorStop(0,`hsla(${s.hue},100%,80%,${s.life*.3})`);
+      sg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=sg;ctx.beginPath();ctx.arc(s.x,s.y,s.r*5,0,Math.PI*2);ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ ANVIL CANVAS (hidden, kept for compatibility) ══ */
+(function(){
+  const c=document.getElementById('anvilCanvas');
+  if(!c)return;
+  const ctx=c.getContext('2d');
+  const W=460,H=400;let t=0;
+  function draw(){
+    t+=.012;ctx.clearRect(0,0,W,H);
+    const cx=W/2,cy=H/2;
+    // Ambient forge glow
+    const ag=ctx.createRadialGradient(cx,cy+60,0,cx,cy+60,200);
+    ag.addColorStop(0,`rgba(255,80,0,${.12+.06*Math.sin(t*.4)})`);ag.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=ag;ctx.fillRect(0,0,W,H);
+    // ANVIL BASE
+    ctx.save();
+    // Main body
+    const ab=ctx.createLinearGradient(cx-100,cy+20,cx+100,cy+20);ab.addColorStop(0,'rgba(35,28,25,.95)');ab.addColorStop(.4,'rgba(55,45,40,.9)');ab.addColorStop(1,'rgba(25,20,18,.95)');
+    ctx.beginPath();ctx.moveTo(cx-100,cy+20);ctx.lineTo(cx+100,cy+20);ctx.lineTo(cx+85,cy+80);ctx.lineTo(cx-85,cy+80);ctx.closePath();ctx.fillStyle=ab;ctx.fill();ctx.strokeStyle='rgba(255,100,20,.15)';ctx.lineWidth=1;ctx.stroke();
+    // Pedestal
+    ctx.beginPath();ctx.moveTo(cx-60,cy+80);ctx.lineTo(cx+60,cy+80);ctx.lineTo(cx+50,cy+130);ctx.lineTo(cx-50,cy+130);ctx.closePath();
+    const pb=ctx.createLinearGradient(cx-60,cy+80,cx+60,cy+80);pb.addColorStop(0,'rgba(25,20,18,.95)');pb.addColorStop(.5,'rgba(45,35,30,.9)');pb.addColorStop(1,'rgba(20,15,14,.95)');
+    ctx.fillStyle=pb;ctx.fill();ctx.strokeStyle='rgba(255,80,0,.1)';ctx.lineWidth=1;ctx.stroke();
+    // Anvil top surface
+    const at=ctx.createLinearGradient(cx-115,cy-20,cx+115,cy-20);at.addColorStop(0,'rgba(40,32,28,.98)');at.addColorStop(.3,'rgba(70,55,48,.92)');at.addColorStop(.7,'rgba(60,48,42,.92)');at.addColorStop(1,'rgba(35,28,24,.98)');
+    ctx.beginPath();ctx.moveTo(cx-115,cy+20);ctx.lineTo(cx-90,cy-20);ctx.lineTo(cx+90,cy-20);ctx.lineTo(cx+115,cy+20);ctx.closePath();ctx.fillStyle=at;ctx.fill();ctx.strokeStyle='rgba(255,120,30,.2)';ctx.lineWidth=1.5;ctx.stroke();
+    // Horn
+    ctx.beginPath();ctx.moveTo(cx-115,cy+10);ctx.bezierCurveTo(cx-150,cy+5,cx-180,cy-5,cx-195,cy-15);ctx.lineTo(cx-195,cy+5);ctx.bezierCurveTo(cx-175,cy+15,cx-150,cy+18,cx-115,cy+20);ctx.closePath();
+    ctx.fillStyle='rgba(45,36,32,.95)';ctx.fill();ctx.strokeStyle='rgba(255,80,0,.12)';ctx.lineWidth=1;ctx.stroke();
+    ctx.restore();
+    // HOT METAL on top of anvil
+    const metalW=140+Math.sin(t*.3)*4;const metalH=18+Math.sin(t*.4)*2;
+    const metalGlow=ctx.createRadialGradient(cx,cy-8,0,cx,cy-8,80);
+    metalGlow.addColorStop(0,`rgba(255,180,0,${.3+.15*Math.sin(t*.5)})`);metalGlow.addColorStop(.4,`rgba(255,80,0,${.15+.08*Math.sin(t*.4)})`);metalGlow.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=metalGlow;ctx.fillRect(cx-80,cy-50,160,60);
+    const mg2=ctx.createLinearGradient(cx-metalW/2,cy-16,cx+metalW/2,cy-16);
+    mg2.addColorStop(0,`rgba(255,120,0,${.9+.1*Math.sin(t*.6)})`);mg2.addColorStop(.2,`rgba(255,200,50,${.95+.05*Math.sin(t*.8)})`);mg2.addColorStop(.5,`rgba(255,220,80,1)`);mg2.addColorStop(.8,`rgba(255,180,30,${.95+.05*Math.sin(t*.7)})`);mg2.addColorStop(1,`rgba(255,100,0,${.9+.1*Math.sin(t*.5)})`);
+    ctx.beginPath();ctx.roundRect(cx-metalW/2,cy-16-metalH/2,metalW,metalH,4);ctx.fillStyle=mg2;ctx.fill();
+    // Pulse glow on metal
+    const pg=ctx.createRadialGradient(cx,cy-16,0,cx,cy-16,metalW/2);
+    pg.addColorStop(0,`rgba(255,240,150,${.15+.1*Math.sin(t*2)})`);pg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=pg;ctx.fillRect(cx-metalW/2-10,cy-16-20,metalW+20,metalH+30);
+    // HAMMER
+    const hammerY=cy-80+Math.sin(t*2.5)*30;const hammerRot=-.15+Math.sin(t*2.5)*.12;
+    ctx.save();ctx.translate(cx+40,hammerY);ctx.rotate(hammerRot);
+    // Handle
+    const hg2=ctx.createLinearGradient(-5,0,5,0);hg2.addColorStop(0,'rgba(80,55,35,.9)');hg2.addColorStop(.5,'rgba(120,85,50,.9)');hg2.addColorStop(1,'rgba(70,48,30,.9)');
+    ctx.beginPath();ctx.roundRect(-4,-5,8,90,2);ctx.fillStyle=hg2;ctx.fill();
+    // Head
+    const hh=ctx.createLinearGradient(-20,-12,20,-12);hh.addColorStop(0,'rgba(55,50,48,.95)');hh.addColorStop(.4,'rgba(85,78,72,.9)');hh.addColorStop(1,'rgba(48,44,42,.95)');
+    ctx.beginPath();ctx.roundRect(-20,-30,40,22,3);ctx.fillStyle=hh;ctx.fill();ctx.strokeStyle='rgba(255,150,50,.2)';ctx.lineWidth=1;ctx.stroke();
+    ctx.restore();
+    // Sparks when hammer hits
+    if(Math.sin(t*2.5)>0.85){
+      for(let i=0;i<3;i++){
+        const sx=cx-40+Math.random()*120;const sy=cy-20;
+        const sr=Math.random()*80;const sa=Math.random()*Math.PI*2;
+        ctx.beginPath();ctx.arc(sx+Math.cos(sa)*sr*.2,sy-Math.random()*30,Math.random()*2.5+.5,0,Math.PI*2);
+        ctx.fillStyle=`rgba(255,${180+Math.floor(Math.random()*75)},${Math.floor(Math.random()*50)},${.7+Math.random()*.3})`;ctx.fill();
+      }
+    }
+    // Circuit lines — AI + forge fusion
+    const circuits=[{x1:cx-180,y1:cy+50,x2:cx-130,y2:cy+50,x3:cx-130,y3:cy+80},{x1:cx+130,y1:cy+40,x2:cx+170,y2:cy+40,x3:cx+170,y3:cy+70}];
+    circuits.forEach(({x1,y1,x2,y2,x3,y3},i)=>{
+      const ca=.15+.1*Math.sin(t*1.5+i);
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineTo(x3,y3);
+      ctx.strokeStyle=`rgba(255,107,26,${ca})`;ctx.lineWidth=1;ctx.stroke();
+      ctx.beginPath();ctx.arc(x3,y3,2.5,0,Math.PI*2);ctx.fillStyle=`rgba(255,107,26,${ca*1.8})`;ctx.fill();
+    });
+    // Title text
+    ctx.save();ctx.font='bold 11px Orbitron, monospace';ctx.letterSpacing='3px';ctx.fillStyle=`rgba(255,107,26,${.35+.12*Math.sin(t*.8)})`;ctx.textAlign='center';ctx.fillText('AI FORGE AUTOMATION',cx,cy+160);ctx.restore();
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ══ FORGE TITLE — letter by letter ══ */
+(function(){
+  const el=document.getElementById('forgeTitle');
+  const lines=[
+    {text:'AUTOMATE.',color:'white'},
+    {text:'DOMINATE.',color:'accent'},
+    {text:'SCALE.',color:'white'},
+  ];
+  let charIndex=0;const allChars=[];
+  lines.forEach((line,li)=>{
+    const lineEl=document.createElement('span');lineEl.style.cssText='display:block;';
+    line.text.split('').forEach((ch,ci)=>{
+      const span=document.createElement('span');
+      span.className='forge-char'+(ch===' '?' space':'');
+      if(ch!==' ')span.textContent=ch;
+      if(line.color==='accent'){span.style.color='var(--orange)';span.style.textShadow='0 0 40px var(--og)';}
+      lineEl.appendChild(span);allChars.push(span);
+    });
+    if(li<lines.length-1){const br=document.createElement('span');br.style.display='block';br.style.height='.05em';lineEl.appendChild(br);}
+    el.appendChild(lineEl);
+  });
+  function forgeNext(){
+    if(charIndex<allChars.length){
+      allChars[charIndex].classList.add('forged');
+      charIndex++;
+      setTimeout(forgeNext,charIndex<10?60:charIndex<20?50:40);
+    }
+  }
+  setTimeout(forgeNext,400);
+})();
+
+/* ══ NAV ══ */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60));
+
+/* ══ REVEAL ══ */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');obs.unobserve(x.target);}}),{threshold:.1});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+
+/* ══ TABS ══ */
+function switchTab(t,btn){
+  document.getElementById('tab-ai').classList.toggle('hidden',t!=='ai');
+  document.getElementById('tab-smm').classList.toggle('hidden',t!=='smm');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ══ DRAG SCROLL ══ */
+document.querySelectorAll('.price-scroll').forEach(el=>{
+  let isDown=false,startX,scrollLeft;
+  el.addEventListener('mousedown',e=>{isDown=true;startX=e.pageX-el.offsetLeft;scrollLeft=el.scrollLeft;});
+  el.addEventListener('mouseleave',()=>isDown=false);
+  el.addEventListener('mouseup',()=>isDown=false);
+  el.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=(e.pageX-el.offsetLeft);el.scrollLeft=scrollLeft-(x-startX)*1.5;});
+});
+
+/* ══ CHATBOT ══ */
+let chatOpen=false,history=[];
+function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);}
+function qa(t){document.getElementById('suggs').style.display='none';am(t,'user');br(t);}
+function sc(){const i=document.getElementById('chatInp');const v=i.value.trim();if(!v)return;i.value='';document.getElementById('suggs').style.display='none';am(v,'user');br(v);}
+function am(t,r){history.push({role:r==='user'?'user':'assistant',content:t.replace(/<[^>]*>/g,'')});const el=document.createElement('div');el.className='msg '+r;el.innerHTML=t;document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;}
+function st(){const el=document.createElement('div');el.className='msg bot';el.id='typ';el.innerHTML='<div class="tw"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;}
+function rt(){const t=document.getElementById('typ');if(t)t.remove();}
+async function br(msg){
+  st();
+  const sys=`You are Forge AI, the professional sales assistant for AI Forge Automation — a company that forges cutting-edge AI systems for businesses. Our brand is built around the metaphor of forging: we take raw business operations and forge them into precision AI-powered systems.
+
+Be professional, concise, confident. Use the forge/craftsmanship metaphor occasionally but don't overdo it. Short paragraphs. Occasional emojis ok.
+
+AI PACKAGES (Setup / Monthly):
+- Starter: $720 / $180/mo — Static website, brand presence
+- Growth: $900 / $270/mo — CMS, edit content yourself  
+- Marketing: $1,260 / $360/mo — Blog, SEO, email
+- Conversion: $1,800 / $360/mo — Lead funnels, pop-ups
+- Automation: $2,700 / $630/mo — AI chatbot, 24/7 lead qualification (MOST POPULAR)
+- Scale: $4,500 / $900/mo — WhatsApp, follow-ups, call center
+- Enterprise: $6,300 / $1,260/mo — Custom ERP, full operations
+
+SMM PACKAGES:
+- Starter: $400/mo — 6 reels, 5 posts, content creation
+- Professional: $600/mo — 8 reels, 7 posts, camera shoot, graphics, strategy call
+- Elite: $1,000/mo — 12 reels, 10 posts, hooks strategy, priority support
+
+Contact: ahmad@forgeaiautomations.net — same day response.
+To book or start: fill the contact form on this page or email directly.`;
+  try{
+    const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:sys,messages:history.slice(-10)})});
+    if(!r.ok)throw new Error();const d=await r.json();rt();
+    am(d.content?.filter(b=>b.type==='text').map(b=>b.text).join('')||'Please email ahmad@forgeaiautomations.net directly!','bot');
+  }catch(e){rt();am('Connection issue — reach us directly at <strong style="color:var(--orange)">ahmad@forgeaiautomations.net</strong> 🔥','bot');}
+}
+
+/* ══ ABOUT SPARK CANVAS over real photo ══ */
+(function(){
+  const c = document.getElementById('aboutSparkCanvas');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  let W, H, t = 0;
+  const sparks = [], embers = [];
+
+  function resize(){
+    W = c.width  = c.parentElement.offsetWidth  || window.innerWidth;
+    H = c.height = c.parentElement.offsetHeight || 700;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // slow-rising embers
+  for(let i=0;i<80;i++){
+    embers.push({
+      x: Math.random() * 2000,
+      y: Math.random() * 2000,
+      vx: (Math.random()-.5) * .35,
+      vy: -(Math.random() * .55 + .1),
+      r: Math.random() * 2 + .4,
+      life: Math.random(),
+      decay: Math.random() * .003 + .001,
+      hue: Math.random() * 40 + 8
+    });
+  }
+
+  function spawnSpark(){
+    if(sparks.length < 90 && Math.random() < .28){
+      sparks.push({
+        x: Math.random() * W,
+        y: H * .55 + Math.random() * H * .45,
+        vx: (Math.random()-.5) * 4,
+        vy: -(Math.random() * 5 + 2),
+        life: 1,
+        decay: Math.random() * .032 + .016,
+        r: Math.random() * 2.8 + .4,
+        hue: Math.random() * 45 + 5,
+        trail: []
+      });
+    }
+  }
+
+  function draw(){
+    t += .01;
+    ctx.clearRect(0, 0, W, H);
+
+    // Embers
+    embers.forEach(e => {
+      e.x += e.vx; e.y += e.vy; e.life -= e.decay;
+      if(e.life <= 0 || e.y < -10){
+        e.x = Math.random() * W;
+        e.y = H + 10;
+        e.life = 1;
+      }
+      const a = e.life * .55;
+      ctx.beginPath();
+      ctx.arc(e.x, e.y, e.r * e.life, 0, Math.PI*2);
+      ctx.fillStyle = `hsla(${e.hue},100%,65%,${a})`;
+      ctx.fill();
+      if(e.r > 1){
+        const g = ctx.createRadialGradient(e.x,e.y,0,e.x,e.y,e.r*4);
+        g.addColorStop(0, `hsla(${e.hue},100%,70%,${a*.4})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(e.x,e.y,e.r*4,0,Math.PI*2); ctx.fill();
+      }
+    });
+
+    // Sparks
+    spawnSpark();
+    for(let i = sparks.length-1; i >= 0; i--){
+      const s = sparks[i];
+      s.trail.push({x:s.x, y:s.y});
+      if(s.trail.length > 10) s.trail.shift();
+      s.x += s.vx; s.y += s.vy; s.vy += .07; s.vx *= .98; s.life -= s.decay;
+      if(s.life <= 0){ sparks.splice(i,1); continue; }
+
+      s.trail.forEach((p,idx) => {
+        const a = (idx/s.trail.length) * s.life * .5;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, s.r*(idx/s.trail.length)*.6, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${s.hue},100%,65%,${a})`;
+        ctx.fill();
+      });
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r*s.life, 0, Math.PI*2);
+      ctx.fillStyle = `hsla(${s.hue},100%,75%,${s.life})`;
+      ctx.fill();
+
+      const sg = ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r*5);
+      sg.addColorStop(0, `hsla(${s.hue},100%,85%,${s.life*.35})`);
+      sg.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = sg;
+      ctx.beginPath(); ctx.arc(s.x,s.y,s.r*5,0,Math.PI*2); ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+
+/* ══ FORM SUBMISSION ══ */
+async function handleSubmit(e){
+  e.preventDefault();
+  const btn=document.getElementById('submitBtn');
+  const ok=document.getElementById('formSuccess');
+  const err=document.getElementById('formError');
+  ok.style.display='none'; err.style.display='none';
+  btn.textContent='Sending...'; btn.disabled=true; btn.style.opacity='.6';
+  try{
+    const res=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        access_key: document.querySelector('[name=access_key]').value,
+        subject: 'New Lead from AI Forge Website',
+        name: document.querySelector('[name=name]') ? document.querySelector('[name=name]').value : '',
+        email: document.querySelector('[name=email]') ? document.querySelector('[name=email]').value : '',
+        message: document.querySelector('[name=message]') ? document.querySelector('[name=message]').value : '',
+        from_name: 'AI Forge Website'
+      })
+    });
+    const data=await res.json();
+    if(data.success){ ok.style.display='block'; e.target.reset(); }
+    else { err.style.display='block'; }
+  }catch(e2){ err.style.display='block'; }
+  finally{ btn.textContent='Forge Your Message →'; btn.disabled=false; btn.style.opacity='1'; }
+}
+
+</script>
+</body>
+</html>
