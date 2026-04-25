@@ -1,7 +1,10 @@
 {
-  "name": "node-starter",
+  "name": "ai-forge-automation",
   "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "echo 'No build step required for static site'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
   }
 }
