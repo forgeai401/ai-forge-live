@@ -221,7 +221,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 @keyframes fabPulse{0%{box-shadow:0 0 0 0 rgba(255,107,26,.55);}70%{box-shadow:0 0 0 18px rgba(255,107,26,0);}100%{box-shadow:0 0 0 0 rgba(255,107,26,0);}}
 .chat-fab:hover{transform:scale(1.1);animation:none;box-shadow:0 0 42px var(--og);}
 .chat-fab svg{width:26px;height:26px;fill:#fff;}
-.chat-win{position:fixed;bottom:5.5rem;right:1.5rem;z-index:9998;width:320px;max-height:65vh;overflow:hidden;background:rgba(4,2,4,0.99);backdrop-filter:blur(30px);border:1px solid rgba(255,107,26,0.3);display:flex;flex-direction:column;box-shadow:0 36px 100px rgba(0,0,0,.9);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1);}
+.chat-win{position:fixed;bottom:5.5rem;right:1.5rem;z-index:999999;width:320px;max-height:65vh;overflow:hidden;background:rgba(4,2,4,0.99);backdrop-filter:blur(30px);border:1px solid rgba(255,107,26,0.3);display:flex;flex-direction:column;box-shadow:0 36px 100px rgba(0,0,0,.9);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1);}
 .chat-win.open{transform:none;opacity:1;pointer-events:all;}
 .chat-head{background:linear-gradient(135deg,#0a0508,#100a0c);border-bottom:1px solid rgba(255,107,26,0.15);padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;}
 .chat-head-l{display:flex;align-items:center;gap:13px;}
@@ -909,7 +909,7 @@ document.querySelectorAll('.price-scroll').forEach(el=>{
 
 /* ══ CHATBOT ══ */
 let chatOpen=false,history=[];
-function toggleChat(e){if(e){e.preventDefault();e.stopPropagation();}if(document.activeElement){document.activeElement.blur();}chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);}
+function toggleChat(e){if(e){e.preventDefault();e.stopPropagation();}if(document.activeElement){document.activeElement.blur();}chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);var form=document.getElementById('contactForm');if(form){form.style.pointerEvents=chatOpen?'none':'all';}}
 function qa(t){document.getElementById('suggs').style.display='none';am(t,'user');br(t);}
 function sc(){const i=document.getElementById('chatInp');const v=i.value.trim();if(!v)return;i.value='';document.getElementById('suggs').style.display='none';am(v,'user');br(v);}
 function am(t,r){history.push({role:r==='user'?'user':'assistant',content:t.replace(/<[^>]*>/g,'')});const el=document.createElement('div');el.className='msg '+r;el.innerHTML=t;document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;}
