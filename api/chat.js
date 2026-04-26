@@ -13,7 +13,7 @@ export default async function handler(req, res) {
         'Authorization': 'Bearer ' + process.env.GROQ_API_KEY
       },
       body: JSON.stringify({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         max_tokens: 500,
         messages: [{ role: 'system', content: system }, ...messages]
       })
@@ -22,7 +22,6 @@ export default async function handler(req, res) {
     const data = await response.json();
     console.log('Groq response:', JSON.stringify(data));
     
-    // Extract the reply and return it simply
     const reply = data?.choices?.[0]?.message?.content;
     return res.status(200).json({ reply: reply || 'No reply' });
     
