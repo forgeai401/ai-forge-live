@@ -550,7 +550,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
     <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
     <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
   </div>
-  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off" readonly onfocus="this.removeAttribute('readonly')"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
 </div>
 <section class="contact-section" id="contact">
   <div class="wrap" style="position:relative;z-index:1;">
@@ -569,7 +569,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
       </div>
       <div class="rv rv3">
         <form class="cform" id="contactForm" onsubmit="handleSubmit(event)" novalidate><input type="hidden" name="access_key" value="0cf7a060-0a46-4c90-b469-33246352f745">
-          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required tabindex="1"></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" required tabindex="2"></div></div>
+          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" tabindex="1"></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" tabindex="2"></div></div>
           <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..." tabindex="3"></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900" tabindex="4"></div></div>
           <div class="fg"><label>Interested In</label>
             <select>
