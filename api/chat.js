@@ -550,7 +550,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
     <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
     <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
   </div>
-  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off" readonly onfocus="this.removeAttribute('readonly')"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off" disabled><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
 </div>
 <section class="contact-section" id="contact">
   <div class="wrap" style="position:relative;z-index:1;">
@@ -909,7 +909,7 @@ document.querySelectorAll('.price-scroll').forEach(el=>{
 
 /* ══ CHATBOT ══ */
 let chatOpen=false,history=[];
-function toggleChat(e){if(e){e.preventDefault();e.stopPropagation();}if(document.activeElement){document.activeElement.blur();}chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);var form=document.getElementById('contactForm');if(form){form.style.pointerEvents=chatOpen?'none':'all';}}
+function toggleChat(e){if(e){e.preventDefault();e.stopPropagation();}if(document.activeElement){document.activeElement.blur();}chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);var inp=document.getElementById('chatInp');if(inp){inp.disabled=!chatOpen;}var form=document.getElementById('contactForm');if(form){form.style.pointerEvents=chatOpen?'none':'all';}}
 function qa(t){document.getElementById('suggs').style.display='none';am(t,'user');br(t);}
 function sc(){const i=document.getElementById('chatInp');const v=i.value.trim();if(!v)return;i.value='';document.getElementById('suggs').style.display='none';am(v,'user');br(v);}
 function am(t,r){history.push({role:r==='user'?'user':'assistant',content:t.replace(/<[^>]*>/g,'')});const el=document.createElement('div');el.className='msg '+r;el.innerHTML=t;document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;}
