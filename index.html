@@ -498,7 +498,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
       <div class="rv rv3">
         <form class="cform" id="contactForm" onsubmit="handleSubmit(event)"><input type="hidden" name="access_key" value="0cf7a060-0a46-4c90-b469-33246352f745">
           <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" required></div></div>
-          <div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..."></div>
+          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..."></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900"></div></div>
           <div class="fg"><label>Interested In</label>
             <select>
               <option value="">Select a service...</option>
@@ -1008,6 +1008,7 @@ async function handleSubmit(e){
         name: document.querySelector('[name=name]') ? document.querySelector('[name=name]').value : '',
         email: document.querySelector('[name=email]') ? document.querySelector('[name=email]').value : '',
         message: document.querySelector('[name=message]') ? document.querySelector('[name=message]').value : '',
+        phone: document.querySelector('[name=phone]') ? document.querySelector('[name=phone]').value : '',
         from_name: 'AI Forge Website'
       })
     });
