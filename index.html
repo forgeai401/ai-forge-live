@@ -490,7 +490,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
     <div class="contact-grid">
       <div class="rv rv2">
         <div class="ci"><h3>Book a Free Strategy Call</h3><p>Every great system starts with a conversation. Tell us about your business and we'll forge a plan that fits — no fluff, no pressure, just clear direction and real solutions.</p></div>
-        <div class="cdet"><div class="cdet-icon">📧</div><div><strong>Email</strong><span>ahmad@forgeaiautomations.net</span></div></div>
+        <div class="cdet"><div class="cdet-icon">📧</div><div><strong>Email</strong><span>support@forgeaiautomations.net</span></div></div>
         <div class="cdet"><div class="cdet-icon">⚡</div><div><strong>Response Time</strong><span>Direct — same day</span></div></div>
         <div class="cdet"><div class="cdet-icon">🌍</div><div><strong>Availability</strong><span>Serving clients worldwide</span></div></div>
         <div class="cbox"><p>💡 <strong style="color:#fff">Not sure which package fits?</strong> Open the AI assistant — it knows every package inside out and will recommend the perfect fit in under 60 seconds.</p></div>
@@ -508,7 +508,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
             </select>
           </div>
           <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
-          <button class="forge-btn" onclick="alert('Message forged & sent!\n\nWe\'ll be in touch same day.\nDirect: ahmad@forgeaiautomations.net')">Forge Your Message →</button>
+          <button class="forge-btn" onclick="alert('Message forged & sent!\n\nWe\'ll be in touch same day.\nDirect: support@forgeaiautomations.net')">Forge Your Message →</button>
         </div>
       </div>
     </div>
@@ -519,7 +519,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   <div class="foot-inner">
     <div class="foot-logo"><span class="ai">AI</span> FORGE AUTOMATION</div>
     <div class="foot-mid">© 2025 AI Forge Automation. Forged with precision. All rights reserved.</div>
-    <div class="foot-email">ahmad@forgeaiautomations.net</div>
+    <div class="foot-email">support@forgeaiautomations.net</div>
   </div>
 </footer>
 
@@ -873,13 +873,13 @@ SMM PACKAGES:
 - Professional: $600/mo — 8 reels, 7 posts, camera shoot, graphics, strategy call
 - Elite: $1,000/mo — 12 reels, 10 posts, hooks strategy, priority support
 
-Contact: ahmad@forgeaiautomations.net — same day response.
+Contact: support@forgeaiautomations.net — same day response.
 To book or start: fill the contact form on this page or email directly.`;
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:sys,messages:history.slice(-10)})});
     const d=await r.json();rt();
-    const reply=d.reply;if(reply){am(reply,'bot');}else{am('Please email ahmad@forgeaiautomations.net directly!','bot');}
-  }catch(e){rt();am('Connection issue — reach us directly at <strong style="color:var(--orange)">ahmad@forgeaiautomations.net</strong> 🔥','bot');}
+    const reply=d.reply;if(reply){am(reply,'bot');}else{am('Please email support@forgeaiautomations.net directly!','bot');}
+  }catch(e){rt();am('Connection issue — reach us directly at <strong style="color:var(--orange)">support@forgeaiautomations.net</strong> 🔥','bot');}
 }
 
 /* ══ ABOUT SPARK CANVAS over real photo ══ */
