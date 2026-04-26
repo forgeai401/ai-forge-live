@@ -217,7 +217,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 .foot-email{color:var(--orange);font-size:.75rem;font-family:var(--fi);}
 
 /* ══════════ CHATBOT ══════════ */
-.chat-fab{position:fixed;bottom:2.2rem;right:2.2rem;z-index:99999;width:62px;height:62px;background:linear-gradient(135deg,var(--orange),var(--red));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);box-shadow:0 0 0 0 rgba(255,107,26,.55);animation:fabPulse 2.5s infinite;transition:transform .2s;}
+.chat-fab{position:fixed;bottom:2.5rem;right:2.2rem;z-index:99999;width:62px;height:62px;background:linear-gradient(135deg,var(--orange),var(--red));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);box-shadow:0 0 0 0 rgba(255,107,26,.55);animation:fabPulse 2.5s infinite;transition:transform .2s;}
 @keyframes fabPulse{0%{box-shadow:0 0 0 0 rgba(255,107,26,.55);}70%{box-shadow:0 0 0 18px rgba(255,107,26,0);}100%{box-shadow:0 0 0 0 rgba(255,107,26,0);}}
 .chat-fab:hover{transform:scale(1.1);animation:none;box-shadow:0 0 42px var(--og);}
 .chat-fab svg{width:26px;height:26px;fill:#fff;}
@@ -555,8 +555,8 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
       </div>
       <div class="rv rv3">
         <form class="cform" id="contactForm" onsubmit="handleSubmit(event)" novalidate><input type="hidden" name="access_key" value="0cf7a060-0a46-4c90-b469-33246352f745">
-          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" required></div></div>
-          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..."></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900"></div></div>
+          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required tabindex="1"></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" required tabindex="2"></div></div>
+          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..." tabindex="3"></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900" tabindex="4"></div></div>
           <div class="fg"><label>Interested In</label>
             <select>
               <option value="">Select a service...</option>
@@ -583,7 +583,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   </div>
 </footer>
 
-<button class="chat-fab" onclick="toggleChat(event)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
+<button class="chat-fab" onclick="toggleChat(event)" type="button"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
 <div class="chat-win" id="chatWin">
   <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat(event)">✕</button></div>
   <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
@@ -593,7 +593,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
     <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
     <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
   </div>
-  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
 </div>
 
 <script>
@@ -907,7 +907,7 @@ document.querySelectorAll('.price-scroll').forEach(el=>{
 
 /* ══ CHATBOT ══ */
 let chatOpen=false,history=[];
-function toggleChat(e){if(e){e.preventDefault();e.stopPropagation();}chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);}
+function toggleChat(e){if(e){e.preventDefault();e.stopPropagation();}if(document.activeElement){document.activeElement.blur();}chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);}
 function qa(t){document.getElementById('suggs').style.display='none';am(t,'user');br(t);}
 function sc(){const i=document.getElementById('chatInp');const v=i.value.trim();if(!v)return;i.value='';document.getElementById('suggs').style.display='none';am(v,'user');br(v);}
 function am(t,r){history.push({role:r==='user'?'user':'assistant',content:t.replace(/<[^>]*>/g,'')});const el=document.createElement('div');el.className='msg '+r;el.innerHTML=t;document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;}
