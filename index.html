@@ -878,7 +878,7 @@ To book or start: fill the contact form on this page or email directly.`;
   try{
     const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system:sys,messages:history.slice(-10)})});
     const d=await r.json();rt();
-    const reply=d.choices?.[0]?.message?.content;if(reply){am(reply,'bot');}else{am('Please email ahmad@forgeaiautomations.net directly!','bot');}
+    const reply=d.reply;if(reply){am(reply,'bot');}else{am('Please email ahmad@forgeaiautomations.net directly!','bot');}
   }catch(e){rt();am('Connection issue — reach us directly at <strong style="color:var(--orange)">ahmad@forgeaiautomations.net</strong> 🔥','bot');}
 }
 
