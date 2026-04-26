@@ -306,6 +306,21 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   .stat-box{padding:1.2rem 2rem;}
 }
 </style>
+<style>
+@media(max-width:900px){
+  [style*="grid-template-columns:1fr 1fr"]{
+    grid-template-columns:1fr!important;
+    gap:2rem!important;
+  }
+  [style*="grid-template-columns: 1fr 1fr"]{
+    grid-template-columns:1fr!important;
+    gap:2rem!important;
+  }
+  .wrap [style*="grid"]{
+    grid-template-columns:1fr!important;
+  }
+}
+</style>
 </head>
 <body>
 
