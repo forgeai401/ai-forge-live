@@ -540,6 +540,18 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 <div class="molten-divider"></div>
 
 <!-- ══ CONTACT ══ -->
+<button class="chat-fab" onclick="toggleChat(event)" type="button"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
+<div class="chat-win" id="chatWin">
+  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat(event)">✕</button></div>
+  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
+  <div class="suggs" id="suggs">
+    <button class="sg" onclick="qa('What services do you offer?')">Services</button>
+    <button class="sg" onclick="qa('Show me your pricing')">Pricing</button>
+    <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
+    <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
+  </div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+</div>
 <section class="contact-section" id="contact">
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:1rem;">
@@ -585,18 +597,6 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   </div>
 </footer>
 
-<button class="chat-fab" onclick="toggleChat(event)" type="button"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
-<div class="chat-win" id="chatWin">
-  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat(event)">✕</button></div>
-  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
-  <div class="suggs" id="suggs">
-    <button class="sg" onclick="qa('What services do you offer?')">Services</button>
-    <button class="sg" onclick="qa('Show me your pricing')">Pricing</button>
-    <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
-    <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
-  </div>
-  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
-</div>
 
 <script>
 /* ══ GLOBAL FORGE CANVAS — sparks & embers ══ */
