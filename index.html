@@ -508,7 +508,9 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
             </select>
           </div>
           <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
-          <button class="forge-btn" onclick="alert('Message forged & sent!\n\nWe\'ll be in touch same day.\nDirect: support@forgeaiautomations.net')">Forge Your Message →</button>
+          <button type="submit" class="forge-btn" id="submitBtn">Forge Your Message →</button>
+          <div id="formSuccess" style="display:none;color:#4caf50;padding:10px;text-align:center;">✅ Message sent! We'll be in touch same day.</div>
+          <div id="formError" style="display:none;color:#e8192c;padding:10px;text-align:center;">❌ Something went wrong. Email us directly at support@forgeaiautomations.net</div>
         </div>
       </div>
     </div>
