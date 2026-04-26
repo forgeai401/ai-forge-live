@@ -875,7 +875,7 @@ SMM PACKAGES:
 
 Contact: ahmad@forgeaiautomations.net — same day response.
 To book or start: fill the contact form on this page or email directly.`;
-  const GROQ_API_KEY = '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';
+  const GROQ_API_KEY = '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';
   try{
     const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+GROQ_API_KEY},body:JSON.stringify({model:'llama3-8b-8192',max_tokens:500,messages:[{role:'system',content:sys},...history.slice(-10)]})});
     if(!r.ok)throw new Error();const d=await r.json();rt();
