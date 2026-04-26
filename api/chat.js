@@ -253,6 +253,8 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 
 @media(max-width:900px){
   *{box-sizing:border-box;}
+  .chat-fab{right:auto!important;left:1rem!important;bottom:1.5rem!important;}
+  .chat-win{right:auto!important;left:1rem!important;bottom:5rem!important;width:320px!important;max-width:320px!important;}
   body{overflow-x:hidden;}
   nav{padding:0 4%;}
   .nav-links{display:none;}
