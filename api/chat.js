@@ -20,8 +20,14 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    return res.status(200).json(data);
+    console.log('Groq response:', JSON.stringify(data));
+    
+    // Extract the reply and return it simply
+    const reply = data?.choices?.[0]?.message?.content;
+    return res.status(200).json({ reply: reply || 'No reply' });
+    
   } catch (err) {
-    return res.status(500).json({ error: 'API error' });
+    console.log('Error:', err.message);
+    return res.status(500).json({ error: err.message });
   }
 }
