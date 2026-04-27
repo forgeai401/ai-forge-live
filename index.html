@@ -936,6 +936,8 @@ async function sendLeadEmail(){
   if(leadEmailSent)return;
   if(!leadData.email&&!leadData.phone)return;
   leadEmailSent=true;
+  // Wait extra 2s to make sure budget is captured from conversation
+  await new Promise(r=>setTimeout(r,2000));
   let score=0;
   if(leadData.name)score+=1;
   if(leadData.email)score+=2;
@@ -959,12 +961,20 @@ async function sendLeadEmail(){
 }
 
 function extractLeadInfo(msg){
+  // Extract email
   const emailMatch=msg.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
   if(emailMatch)leadData.email=emailMatch[0];
+  // Extract phone
   const phoneMatch=msg.match(/[\+]?[\d][\d\s\-\(\)]{7,}/);
   if(phoneMatch)leadData.phone=phoneMatch[0].trim();
-  if(msg.match(/\$|budget|invest|per month|\/mo/i))leadData.budget=msg;
-  if((leadData.email||leadData.phone)&&leadData.business)sendLeadEmail();
+  // Extract budget - capture ANY message that has numbers or budget keywords
+  if(!leadData.budget && msg.match(/\$|\d+\s*(k|usd|dollar|per|month|mo|\/mo|budget|invest|spend|afford|range|monthly)/i))leadData.budget=msg;
+  if(!leadData.budget && msg.match(/\d{2,}/))leadData.budget=msg; // any number 10+
+  // Only send email once we have contact info AND at least name+business
+  if((leadData.email||leadData.phone) && leadData.name && leadData.business){
+    // Wait a bit to capture budget first
+    setTimeout(sendLeadEmail, 3000);
+  }
 }
 
 async function br(msg){
