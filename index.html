@@ -950,13 +950,30 @@ async function sendLeadEmail(){
   else if(b.includes('100'))score+=1;
   const label=score>=8?'🔥 HOT':score>=5?'⚡ WARM':'❄️ COLD';
   try{
-    await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({
-      access_key:'0cf7a060-0a46-4c90-b469-33246352f745',
-      subject:label+' New Lead '+score+'/10 — '+(leadData.name||'Unknown')+' via Chatbot',
-      name:leadData.name||'Unknown',
-      email:leadData.email||'Not provided',
-      message:'LEAD SCORE: '+score+'/10 '+label+'\n\nName: '+(leadData.name||'—')+'\nEmail: '+(leadData.email||'—')+'\nPhone: '+(leadData.phone||'—')+'\nBusiness: '+(leadData.business||'—')+'\nBudget: '+(leadData.budget||'—')+'\nProblem: '+(leadData.problem||'—')+'\n\nRecommended: Scale ($3,499.99 / $699.99mo)'
-    })});
+    const emailBody = 
+      'LEAD SCORE: '+score+'/10 '+label+'\n'+
+      '================================\n'+
+      'Name: '+(leadData.name||'Not provided')+'\n'+
+      'Email: '+(leadData.email||'Not provided')+'\n'+
+      'Phone: '+(leadData.phone||'Not provided')+'\n'+
+      'Business: '+(leadData.business||'Not provided')+'\n'+
+      'Budget: '+(leadData.budget||'Not provided')+'\n'+
+      'Problem: '+(leadData.problem||'Not provided')+'\n'+
+      '================================\n'+
+      'Recommended Package: Scale ($3,499.99 / $699.99/mo)';
+    await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        access_key:'0cf7a060-0a46-4c90-b469-33246352f745',
+        subject:label+' Lead '+score+'/10 — '+(leadData.name||'Unknown')+' | Budget: '+(leadData.budget||'Unknown')+' | '+leadData.business,
+        name:label+' '+score+'/10 — '+(leadData.name||'Unknown'),
+        email:leadData.email||'noemail@chatbot.com',
+        phone:leadData.phone||'',
+        message:emailBody,
+        from_name:'AI Forge Chatbot'
+      })
+    });
   }catch(err){}
 }
 
