@@ -217,12 +217,12 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 .foot-email{color:var(--orange);font-size:.75rem;font-family:var(--fi);}
 
 /* ══════════ CHATBOT ══════════ */
-.chat-fab{position:fixed;bottom:2.2rem;right:2.2rem;z-index:9999;width:62px;height:62px;background:linear-gradient(135deg,var(--orange),var(--red));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);box-shadow:0 0 0 0 rgba(255,107,26,.55);animation:fabPulse 2.5s infinite;transition:transform .2s;}
+.chat-fab{position:fixed;bottom:2.5rem;right:2.2rem;z-index:99999;width:62px;height:62px;background:linear-gradient(135deg,var(--orange),var(--red));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;clip-path:polygon(10px 0%,100% 0%,100% calc(100% - 10px),calc(100% - 10px) 100%,0% 100%,0% 10px);box-shadow:0 0 0 0 rgba(255,107,26,.55);animation:fabPulse 2.5s infinite;transition:transform .2s;}
 @keyframes fabPulse{0%{box-shadow:0 0 0 0 rgba(255,107,26,.55);}70%{box-shadow:0 0 0 18px rgba(255,107,26,0);}100%{box-shadow:0 0 0 0 rgba(255,107,26,0);}}
 .chat-fab:hover{transform:scale(1.1);animation:none;box-shadow:0 0 42px var(--og);}
 .chat-fab svg{width:26px;height:26px;fill:#fff;}
-.chat-win{position:fixed;bottom:5.5rem;right:1.5rem;z-index:9998;width:320px;max-height:65vh;overflow:hidden;background:rgba(4,2,4,0.99);backdrop-filter:blur(30px);border:1px solid rgba(255,107,26,0.3);display:flex;flex-direction:column;box-shadow:0 36px 100px rgba(0,0,0,.9);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1);}
-.chat-win.open{transform:none;opacity:1;pointer-events:all;}
+.chat-win{position:fixed;bottom:5.5rem;right:1.5rem;z-index:999999;width:320px;max-height:65vh;overflow:hidden;background:rgba(4,2,4,0.99);backdrop-filter:blur(30px);border:1px solid rgba(255,107,26,0.3);display:none;flex-direction:column;box-shadow:0 36px 100px rgba(0,0,0,.9);transform:translateY(20px) scale(.95);opacity:0;pointer-events:none;transition:all .32s cubic-bezier(.34,1.56,.64,1);}
+.chat-win.open{display:flex;transform:none;opacity:1;pointer-events:all;}
 .chat-head{background:linear-gradient(135deg,#0a0508,#100a0c);border-bottom:1px solid rgba(255,107,26,0.15);padding:.7rem 1rem;display:flex;align-items:center;justify-content:space-between;}
 .chat-head-l{display:flex;align-items:center;gap:13px;}
 .chat-av{width:40px;height:40px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:.55rem;color:#fff;flex-shrink:0;position:relative;clip-path:polygon(6px 0%,100% 0%,100% calc(100% - 6px),calc(100% - 6px) 100%,0% 100%,0% 6px);}
@@ -253,6 +253,7 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 
 @media(max-width:900px){
   *{box-sizing:border-box;}
+  .chat-fab{right:auto!important;left:1rem!important;bottom:1.5rem!important;}
   body{overflow-x:hidden;}
   nav{padding:0 4%;}
   .nav-links{display:none;}
@@ -283,8 +284,6 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   .frow{grid-template-columns:1fr;}
   .section-title{font-size:clamp(1.4rem,5vw,2rem)!important;}
   section{padding-left:5%!important;padding-right:5%!important;}
-  .chat-win{width:320px!important;right:1rem!important;left:auto!important;bottom:5rem!important;}
-  .chat-btn{right:1rem;bottom:1rem;}
   .foot-links{flex-wrap:wrap;gap:1rem;}
 }
   .hero-sub{font-size:.9rem;padding:0 1rem;}
@@ -302,7 +301,6 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   .svc-tag{display:none;}
   .contact-grid{grid-template-columns:1fr;}
   .frow{grid-template-columns:1fr;}
-  .chat-win{width:320px!important;right:1rem!important;left:auto!important;bottom:5rem!important;}
   .stat-box{padding:1.2rem 2rem;}
 }
 </style>
@@ -324,6 +322,18 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 </head>
 <body>
 
+<button class="chat-fab" onclick="toggleChat(event)" type="button"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
+<div class="chat-win" id="chatWin">
+  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat(event)" tabindex="-1">✕</button></div>
+  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
+  <div class="suggs" id="suggs">
+    <button class="sg" onclick="qa('What services do you offer?')" tabindex="-1">Services</button>
+    <button class="sg" onclick="qa('Show me your pricing')" tabindex="-1">Pricing</button>
+    <button class="sg" onclick="qa('Help me choose the right package')" tabindex="-1">Help me choose</button>
+    <button class="sg" onclick="qa('What makes AI Forge different?')" tabindex="-1">Why AI Forge?</button>
+  </div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off" disabled><button class="chat-snd" onclick="sc()" tabindex="-1"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+</div>
 <canvas id="forgeCanvas"></canvas>
 
 <nav id="nav">
@@ -554,18 +564,18 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
         <div class="cbox"><p>💡 <strong style="color:#fff">Not sure which package fits?</strong> Open the AI assistant — it knows every package inside out and will recommend the perfect fit in under 60 seconds.</p></div>
       </div>
       <div class="rv rv3">
-        <form class="cform" id="contactForm" onsubmit="handleSubmit(event)"><input type="hidden" name="access_key" value="0cf7a060-0a46-4c90-b469-33246352f745">
-          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" required></div></div>
-          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..."></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900"></div></div>
+        <form class="cform" id="contactForm" onsubmit="handleSubmit(event)" novalidate><input type="hidden" name="access_key" value="0cf7a060-0a46-4c90-b469-33246352f745">
+          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" tabindex="-1"></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" tabindex="-1"></div></div>
+          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..." tabindex="-1"></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900" tabindex="-1"></div></div>
           <div class="fg"><label>Interested In</label>
-            <select>
+            <select tabindex="-1">
               <option value="">Select a service...</option>
               <option>AI — Starter ($139.99/mo)</option><option>AI — Growth ($209.99/mo)</option><option>AI — Marketing ($279.99/mo)</option><option>AI — Conversion ($279.99/mo)</option><option>AI — Automation ($489.99/mo)</option><option>AI — Scale ($699.99/mo)</option><option>AI — Enterprise ($979.99/mo)</option>
               <option>SMM — Starter ($400/mo)</option><option>SMM — Professional ($600/mo)</option><option>SMM — Elite ($1,000/mo)</option>
               <option>Not sure — need advice</option>
             </select>
           </div>
-          <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
+          <div class="fg"><label>Message</label><textarea name="message" tabindex="-1" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
           <button type="submit" class="forge-btn" id="submitBtn">Forge Your Message →</button>
           <div id="formSuccess" style="display:none;color:#4caf50;padding:10px;text-align:center;">✅ Message sent! We'll be in touch same day.</div>
           <div id="formError" style="display:none;color:#e8192c;padding:10px;text-align:center;">❌ Something went wrong. Email us directly at support@forgeaiautomations.net</div>
@@ -583,18 +593,6 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
   </div>
 </footer>
 
-<button class="chat-fab" onclick="toggleChat()"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
-<div class="chat-win" id="chatWin">
-  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat()">✕</button></div>
-  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
-  <div class="suggs" id="suggs">
-    <button class="sg" onclick="qa('What services do you offer?')">Services</button>
-    <button class="sg" onclick="qa('Show me your pricing')">Pricing</button>
-    <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
-    <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
-  </div>
-  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()"><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
-</div>
 
 <script>
 /* ══ GLOBAL FORGE CANVAS — sparks & embers ══ */
@@ -907,7 +905,24 @@ document.querySelectorAll('.price-scroll').forEach(el=>{
 
 /* ══ CHATBOT ══ */
 let chatOpen=false,history=[];
-function toggleChat(){chatOpen=!chatOpen;document.getElementById('chatWin').classList.toggle('open',chatOpen);}
+function toggleChat(e){
+  if(e){e.preventDefault();e.stopPropagation();}
+  // Blur everything first
+  if(document.activeElement){document.activeElement.blur();}
+  document.body.focus();
+  chatOpen=!chatOpen;
+  var win=document.getElementById('chatWin');
+  win.classList.toggle('open',chatOpen);
+  var inp=document.getElementById('chatInp');
+  if(inp){inp.disabled=!chatOpen;}
+  // Disable all form inputs behind chat
+  var form=document.getElementById('contactForm');
+  if(form){
+    form.querySelectorAll('input,textarea,select').forEach(function(el){
+      el.tabIndex=chatOpen?-1:0;
+    });
+  }
+}
 function qa(t){document.getElementById('suggs').style.display='none';am(t,'user');br(t);}
 function sc(){const i=document.getElementById('chatInp');const v=i.value.trim();if(!v)return;i.value='';document.getElementById('suggs').style.display='none';am(v,'user');br(v);}
 function am(t,r){history.push({role:r==='user'?'user':'assistant',content:t.replace(/<[^>]*>/g,'')});const el=document.createElement('div');el.className='msg '+r;el.innerHTML=t;document.getElementById('chatMsgs').appendChild(el);document.getElementById('chatMsgs').scrollTop=99999;}
@@ -1077,6 +1092,16 @@ async function handleSubmit(e){
   finally{ btn.textContent='Forge Your Message →'; btn.disabled=false; btn.style.opacity='1'; }
 }
 
+</script>
+
+<script>
+// Re-enable form inputs on direct tap
+document.querySelectorAll('.cform input, .cform textarea, .cform select').forEach(function(el){
+  el.addEventListener('touchstart', function(){
+    this.tabIndex = 0;
+    this.focus();
+  }, {once: true});
+});
 </script>
 </body>
 </html>
