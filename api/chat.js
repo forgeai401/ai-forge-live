@@ -326,6 +326,18 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 </head>
 <body>
 
+<button class="chat-fab" onclick="toggleChat(event)" type="button"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
+<div class="chat-win" id="chatWin">
+  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat(event)">✕</button></div>
+  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
+  <div class="suggs" id="suggs">
+    <button class="sg" onclick="qa('What services do you offer?')">Services</button>
+    <button class="sg" onclick="qa('Show me your pricing')">Pricing</button>
+    <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
+    <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
+  </div>
+  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off" disabled><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
+</div>
 <canvas id="forgeCanvas"></canvas>
 
 <nav id="nav">
@@ -540,18 +552,6 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
 <div class="molten-divider"></div>
 
 <!-- ══ CONTACT ══ -->
-<button class="chat-fab" onclick="toggleChat(event)" type="button"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.67 1.19 5.07 3.08 6.74L4 21l4.3-1.4C9.37 20.17 10.65 20.5 12 20.5c5.52 0 10-4.02 10-9s-4.48-9-10-9zm1 13H7v-2h6v2zm2-4H7V9h8v2z"/></svg></button>
-<div class="chat-win" id="chatWin">
-  <div class="chat-head"><div class="chat-head-l"><div class="chat-av">AF</div><div><div class="chat-nm">FORGE AI ASSISTANT</div><div class="chat-st">Online — Ready to help</div></div></div><button class="chat-x" onclick="toggleChat(event)">✕</button></div>
-  <div class="chat-msgs" id="chatMsgs"><div class="msg bot">🔥 Welcome to <strong>AI Forge Automation</strong>! I'm your AI assistant. Ask me anything about our services, packages, or how we can forge your business into something legendary.</div></div>
-  <div class="suggs" id="suggs">
-    <button class="sg" onclick="qa('What services do you offer?')">Services</button>
-    <button class="sg" onclick="qa('Show me your pricing')">Pricing</button>
-    <button class="sg" onclick="qa('Help me choose the right package')">Help me choose</button>
-    <button class="sg" onclick="qa('What makes AI Forge different?')">Why AI Forge?</button>
-  </div>
-  <div class="chat-inp-row"><input class="chat-inp" id="chatInp" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sc()" autocomplete="off" autocorrect="off" autocapitalize="off" disabled><button class="chat-snd" onclick="sc()"><svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg></button></div>
-</div>
 <section class="contact-section" id="contact">
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:1rem;">
@@ -569,17 +569,17 @@ footer{position:relative;z-index:1;background:#000;border-top:1px solid rgba(255
       </div>
       <div class="rv rv3">
         <form class="cform" id="contactForm" onsubmit="handleSubmit(event)" novalidate><input type="hidden" name="access_key" value="0cf7a060-0a46-4c90-b469-33246352f745">
-          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" tabindex="1"></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" tabindex="2"></div></div>
-          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..." tabindex="3"></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900" tabindex="4"></div></div>
+          <div class="frow"><div class="fg"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" tabindex="-1"></div><div class="fg"><label>Business Email</label><input type="email" name="email" placeholder="you@company.com" tabindex="-1"></div></div>
+          <div class="frow"><div class="fg"><label>Business Type</label><input type="text" name="business_type" placeholder="e.g. Restaurant, E-commerce, Agency..." tabindex="-1"></div><div class="fg"><label>Phone Number</label><input type="tel" name="phone" placeholder="+1 234 567 8900" tabindex="-1"></div></div>
           <div class="fg"><label>Interested In</label>
-            <select>
+            <select tabindex="-1">
               <option value="">Select a service...</option>
               <option>AI — Starter ($139.99/mo)</option><option>AI — Growth ($209.99/mo)</option><option>AI — Marketing ($279.99/mo)</option><option>AI — Conversion ($279.99/mo)</option><option>AI — Automation ($489.99/mo)</option><option>AI — Scale ($699.99/mo)</option><option>AI — Enterprise ($979.99/mo)</option>
               <option>SMM — Starter ($400/mo)</option><option>SMM — Professional ($600/mo)</option><option>SMM — Elite ($1,000/mo)</option>
               <option>Not sure — need advice</option>
             </select>
           </div>
-          <div class="fg"><label>Message</label><textarea name="message" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
+          <div class="fg"><label>Message</label><textarea name="message" tabindex="-1" placeholder="Tell us about your business and what you want to achieve..."></textarea></div>
           <button type="submit" class="forge-btn" id="submitBtn">Forge Your Message →</button>
           <div id="formSuccess" style="display:none;color:#4caf50;padding:10px;text-align:center;">✅ Message sent! We'll be in touch same day.</div>
           <div id="formError" style="display:none;color:#e8192c;padding:10px;text-align:center;">❌ Something went wrong. Email us directly at support@forgeaiautomations.net</div>
@@ -1079,6 +1079,16 @@ async function handleSubmit(e){
   finally{ btn.textContent='Forge Your Message →'; btn.disabled=false; btn.style.opacity='1'; }
 }
 
+</script>
+
+<script>
+// Re-enable form inputs on direct tap
+document.querySelectorAll('.cform input, .cform textarea, .cform select').forEach(function(el){
+  el.addEventListener('touchstart', function(){
+    this.tabIndex = 0;
+    this.focus();
+  }, {once: true});
+});
 </script>
 </body>
 </html>
