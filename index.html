@@ -988,9 +988,9 @@ async function sendLeadEmail(){
           name:leadData.name||'there',
           email:leadData.email,
           message:'Hi '+(leadData.name||'there')+'!\n\nThank you for reaching out to AI Forge Automation! 🔥\n\n'+
-            (leadData.business ? 'We understand you run a '+leadData.business+' and ' : 'We ')+
-            (leadData.problem ? 'are looking to solve: '+leadData.problem+'.' : 'received your message.')+'\n\n'+
-            'Our sales team will get back to you within the same day.\n\n'+
+            'We have received your details and our sales team will get back to you within the same day.\n\n'+
+            (leadData.business ? 'Business: '+leadData.business+'\n' : '')+
+            (leadData.problem ? 'Challenge: '+leadData.problem+'\n\n' : '\n')+
             'In the meantime, book your free 30-minute strategy call here:\n\n'+
             '👉 https://calendly.com/forgeaiautomation-sales/30min\n\n'+
             'We will show you exactly how AI automation can help you grow.\n\nTalk soon,\nAI Forge Team\nsales@forgeaiautomations.net',
