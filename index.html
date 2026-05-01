@@ -993,7 +993,7 @@ async function sendLeadEmail(){
   if(leadData.phone)score+=2;
   if(leadData.business)score+=1;
   if(leadData.problem)score+=1;
-  const b=leadData.budget.toLowerCase();
+  const b=(leadData.budget||'').toLowerCase();
   if(b.includes('400')||b.includes('500')||b.includes('600')||b.includes('700')||b.includes('1000')||b.includes('k'))score+=3;
   else if(b.includes('200')||b.includes('300'))score+=2;
   else if(b.includes('100'))score+=1;
@@ -1246,23 +1246,16 @@ async function handleSubmit(e){
     if(data.success){
       ok.style.display='block';
       e.target.reset();
-      // Send auto-reply to person who submitted the form
+      // Send auto-reply to person who submitted the form via EmailJS
       if(formEmail){
         try{
-          await fetch('https://api.web3forms.com/submit',{
-            method:'POST',
-            headers:{'Content-Type':'application/json','Accept':'application/json'},
-            body:JSON.stringify({
-              access_key:'0cf7a060-0a46-4c90-b469-33246352f745',
-              subject:'We received your message — Book your free strategy call 🔥',
-              name:formName,
-              email:formEmail,
-              message:'Hi '+formName+'!\n\nThank you for reaching out to AI Forge Automation! 🔥\n\nOur sales team has received your message and will get back to you within the same day.\n\nIn the meantime, book your free 30-minute strategy call here:\n\n👉 https://calendly.com/forgeaiautomation-sales/30min\n\nWe will show you exactly how AI automation can transform your business.\n\nTalk soon,\nAI Forge Team\nsales@forgeaiautomations.net',
-              from_name:'AI Forge Automation',
-              replyto:'sales@forgeaiautomations.net'
-            })
+          await emailjs.send('service_q2n2lml','template_yruvosk',{
+            name: formName,
+            email: formEmail,
+            business: formData.get('service')||'Not specified',
+            problem: formData.get('message')||'Not provided'
           });
-        }catch(err){}
+        }catch(err){console.log('EmailJS form error:',err);}
       }
     }
     else { err.style.display='block'; }
