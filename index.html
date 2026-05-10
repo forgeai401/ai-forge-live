@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1035,7 +1036,7 @@ function extractLeadInfo(msg){
   if(!leadData.budget && msg.match(/\$|\d+\s*(k|usd|dollar|per|month|mo|\/mo|budget|invest|spend|afford|range|monthly)/i))leadData.budget=msg;
   if(!leadData.budget && msg.match(/\d{2,}/))leadData.budget=msg; // any number 10+
   // Only send after we have name + business + problem/budget + contact info
-  if((leadData.email||leadData.phone) && leadData.name && leadData.business && (leadData.problem||leadData.budget)){
+  if((leadData.email||leadData.phone) && leadData.business && (leadData.problem||leadData.budget)){
     setTimeout(sendLeadEmail, 3000);
   }
 }
