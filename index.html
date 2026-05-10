@@ -1230,28 +1230,29 @@ async function handleSubmit(e){
     });
     const data=await res.json();
     if(data.success){
+      const fPhone=formData.get('phone')||'Not provided';
+      const fBusiness=formData.get('business_type')||'Not provided';
+      const fMessage=formData.get('message')||'Not provided';
       ok.style.display='block';
       e.target.reset();
-      // Send support notification via EmailJS
       try{
         await emailjs.send('service_q2n2lml','template_gxiedbd',{
           score: 'Form Submission',
           name: formName,
           email: formEmail||'Not provided',
-          phone: document.querySelector('[name=phone]')?document.querySelector('[name=phone]').value:'Not provided',
-          business: document.querySelector('[name=business_type]')?document.querySelector('[name=business_type]').value:'Not provided',
-          budget: document.querySelector('[name=budget]')?document.querySelector('[name=budget]').value:'Not provided',
-          problem: document.querySelector('[name=message]')?document.querySelector('[name=message]').value:'Not provided'
+          phone: fPhone,
+          business: fBusiness,
+          budget: 'Not provided',
+          problem: fMessage
         });
       }catch(err){console.log('Support email error:',err);}
-      // Send welcome email to client via EmailJS
       if(formEmail){
         try{
           await emailjs.send('service_q2n2lml','template_yruvosk',{
             name: formName,
             email: formEmail,
-            business: document.querySelector('[name=business_type]')?document.querySelector('[name=business_type]').value:'',
-            problem: document.querySelector('[name=message]')?document.querySelector('[name=message]').value:''
+            business: fBusiness,
+            problem: fMessage
           });
         }catch(err){console.log('Client email error:',err);}
       }
